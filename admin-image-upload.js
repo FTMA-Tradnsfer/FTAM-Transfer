@@ -1,3 +1,17 @@
+const FTMA_ADMIN_LOGIN_API='https://iloanplyuatfcwzovbpb.supabase.co/functions/v1/ftma-admin-login';
+(function(){
+  const nativeFetch=window.fetch.bind(window);
+  window.fetch=async function(input,init={}){
+    const url=typeof input==='string'?input:(input&&input.url)||'';
+    if(url.includes('/rest/v1/rpc/ftma_admin_login')){
+      let password='';
+      try{const body=typeof init.body==='string'?JSON.parse(init.body):init.body;password=body?.p_password||''}catch{}
+      const next={...init,method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password})};
+      return nativeFetch(FTMA_ADMIN_LOGIN_API,next);
+    }
+    return nativeFetch(input,init);
+  };
+})();
 const FTMA_IMAGE_API='https://iloanplyuatfcwzovbpb.supabase.co/functions/v1/ftma-media-upload';
 const FTMA_IMAGE_MAX=8*1024*1024;
 async function ftmaUploadFile(file,folder){
