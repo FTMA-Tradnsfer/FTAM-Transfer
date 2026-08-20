@@ -13,9 +13,12 @@
   const error=document.getElementById('adminLoginError');
   if(!form||!lock||!app||!input||!button||!error)return;
 
-  const getToken=()=>sessionStorage.getItem('ftma_admin_token')||localStorage.getItem('ftma_admin_token')||'';
-  const getExpires=()=>sessionStorage.getItem('ftma_admin_expires')||localStorage.getItem('ftma_admin_expires')||'';
-  const clearSession=()=>['ftma_admin_token','ftma_admin_expires'].forEach(k=>{sessionStorage.removeItem(k);localStorage.removeItem(k)});
+  // Admin authentication is intentionally session-scoped.
+  // Never persist the privileged token in localStorage: a shared/public browser
+  // profile must not inherit an administrator session across tabs or visits.
+  const getToken=()=>sessionStorage.getItem('ftma_admin_token')||'';
+  const getExpires=()=>sessionStorage.getItem('ftma_admin_expires')||'';
+  const clearSession=()=>{sessionStorage.removeItem('ftma_admin_token');sessionStorage.removeItem('ftma_admin_expires');localStorage.removeItem('ftma_admin_token');localStorage.removeItem('ftma_admin_expires');};
   const busy=v=>{button.disabled=v;button.textContent=v?'로그인 확인 중...':'관리자 페이지 입장'};
 
   function showApp(){
@@ -23,8 +26,6 @@
     document.body.dataset.adminAuthenticated='true';
     app.hidden=false;
     app.style.display='block';
-    // Remove the login overlay entirely after successful authentication.
-    // This prevents any later script/style from restoring it.
     if(lock&&lock.parentNode)lock.remove();
   }
 
@@ -45,8 +46,9 @@
     const expires=data.expires_at||'';
     sessionStorage.setItem('ftma_admin_token',data.token);
     sessionStorage.setItem('ftma_admin_expires',expires);
-    localStorage.setItem('ftma_admin_token',data.token);
-    localStorage.setItem('ftma_admin_expires',expires);
+    // Do not write the privileged token to localStorage.
+    localStorage.removeItem('ftma_admin_token');
+    localStorage.removeItem('ftma_admin_expires');
   }
 
   async function requestJson(url,options,timeoutMs){
@@ -92,7 +94,6 @@
     }
   }
 
-  // Block every native form submission on this page, including implicit Enter submission.
   document.addEventListener('submit',e=>e.preventDefault(),true);
   document.addEventListener('keydown',e=>{
     if((e.key==='Enter'||e.key==='NumpadEnter')&&document.activeElement===input){
@@ -103,6 +104,10 @@
   },true);
   button.type='button';
   button.addEventListener('click',login);
+
+  // Remove any legacy persistent admin token immediately.
+  localStorage.removeItem('ftma_admin_token');
+  localStorage.removeItem('ftma_admin_expires');
 
   if(!restoreSession()){
     clearSession();
