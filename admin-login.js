@@ -3,6 +3,8 @@
   if(window.__FTMA_ADMIN_LOGIN_BOUND__) return;
   window.__FTMA_ADMIN_LOGIN_BOUND__=true;
 
+  const SUPABASE_URL='https://iloanplyuatfcwzovbpb.supabase.co';
+  const SUPABASE_KEY='sb_publishable_oPXhOaLIGK05Ehw-o6jDsw_TKJODpjM';
   const form=document.getElementById('adminLoginForm');
   const lock=document.getElementById('adminLock');
   const app=document.getElementById('adminApp');
@@ -23,20 +25,32 @@
     if(typeof window.refreshAdminData==='function')window.refreshAdminData();
   };
 
-  async function callLogin(password){
+  async function requestJson(url,options,timeoutMs){
     const controller=new AbortController();
-    const timer=setTimeout(()=>controller.abort(),8000);
+    const timer=setTimeout(()=>controller.abort(),timeoutMs);
     try{
-      const response=await fetch('/api/admin-login',{
-        method:'POST',
-        headers:{'Content-Type':'application/json','Accept':'application/json'},
-        body:JSON.stringify({password}),cache:'no-store',signal:controller.signal
-      });
+      const response=await fetch(url,{...options,cache:'no-store',signal:controller.signal});
       const text=await response.text();
       let data=null;try{data=text?JSON.parse(text):null}catch(_){data=null;}
-      if(!response.ok)throw new Error(data?.message||text||('로그인 서버 오류 ('+response.status+')'));
+      if(!response.ok)throw new Error(data?.message||data?.error||text||('HTTP '+response.status));
       return data;
     }finally{clearTimeout(timer)}
+  }
+
+  async function callProxy(password){
+    return requestJson('/api/admin-login',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify({password})
+    },3000);
+  }
+
+  async function callDirectRpc(password){
+    return requestJson(`${SUPABASE_URL}/rest/v1/rpc/ftma_admin_login`,{
+      method:'POST',
+      headers:{apikey:SUPABASE_KEY,Authorization:`Bearer ${SUPABASE_KEY}`,'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify({p_password:password})
+    },5000);
   }
 
   async function login(e){
@@ -46,7 +60,12 @@
     if(!password){error.textContent='관리자 비밀번호를 입력해주세요.';return;}
     busy(true);error.textContent='';
     try{
-      const data=await callLogin(password);
+      let data;
+      try{
+        data=await callProxy(password);
+      }catch(proxyError){
+        data=await callDirectRpc(password);
+      }
       openAdmin(data);
     }catch(err){
       error.textContent=err?.name==='AbortError'?'로그인 서버 응답 시간이 초과되었습니다. 다시 시도해주세요.':'로그인 실패: '+(err?.message||'알 수 없는 오류');
