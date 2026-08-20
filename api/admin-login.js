@@ -4,47 +4,51 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ ok: false, message: 'Method not allowed' });
   }
 
+  const password = String((typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {})).password || '');
+  if (!password) return res.status(400).json({ ok: false, message: '관리자 비밀번호를 입력해주세요.' });
+
+  const supabaseUrl = 'https://iloanplyuatfcwzovbpb.supabase.co';
+  const supabaseKey = 'sb_publishable_oPXhOaLIGK05Ehw-o6jDsw_TKJODpjM';
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 7000);
+
   try {
-    const body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
-    const password = String(body.password || '');
-    if (!password) return res.status(400).json({ ok: false, message: '관리자 비밀번호를 입력해주세요.' });
-
-    const supabaseUrl = 'https://iloanplyuatfcwzovbpb.supabase.co';
-    const supabaseKey = 'sb_publishable_oPXhOaLIGK05Ehw-o6jDsw_TKJODpjM';
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 6500);
-
-    let response;
-    try {
-      response = await fetch(`${supabaseUrl}/functions/v1/ftma-admin-login`, {
-        method: 'POST',
-        headers: {
-          apikey: supabaseKey,
-          Authorization: `Bearer ${supabaseKey}`,
-          'Content-Type': 'application/json',
-          Accept: 'application/json'
-        },
-        body: JSON.stringify({ password }),
-        cache: 'no-store',
-        signal: controller.signal
-      });
-    } finally {
-      clearTimeout(timer);
-    }
+    // Call the existing Postgres RPC directly. This avoids browser CORS and
+    // avoids the Edge Function JWT/API-key compatibility layer entirely.
+    const response = await fetch(`${supabaseUrl}/rest/v1/rpc/ftma_admin_login`, {
+      method: 'POST',
+      headers: {
+        apikey: supabaseKey,
+        'Content-Type': 'application/json',
+        Accept: 'application/json'
+      },
+      body: JSON.stringify({ p_password: password }),
+      cache: 'no-store',
+      signal: controller.signal
+    });
 
     const text = await response.text();
     let data = null;
     try { data = text ? JSON.parse(text) : null; } catch (_) {}
 
     if (!response.ok) {
-      return res.status(response.status).json({ ok: false, message: data?.message || data?.error || text || `인증 서버 오류 (${response.status})` });
+      return res.status(response.status).json({
+        ok: false,
+        message: data?.message || data?.error || text || `인증 서버 오류 (${response.status})`
+      });
     }
+
     if (!data?.ok || !data?.token) {
       return res.status(401).json({ ok: false, message: data?.message || '관리자 인증에 실패했습니다.' });
     }
+
     return res.status(200).json(data);
   } catch (error) {
-    if (error?.name === 'AbortError') return res.status(504).json({ ok: false, message: '인증 서버 응답 시간이 초과되었습니다. 잠시 후 다시 시도해주세요.' });
+    if (error?.name === 'AbortError') {
+      return res.status(504).json({ ok: false, message: '인증 서버 응답 시간이 초과되었습니다. 잠시 후 다시 시도해주세요.' });
+    }
     return res.status(500).json({ ok: false, message: error?.message || '관리자 로그인 서버 오류가 발생했습니다.' });
+  } finally {
+    clearTimeout(timer);
   }
 };
