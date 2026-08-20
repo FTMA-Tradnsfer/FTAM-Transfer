@@ -34,10 +34,14 @@
   function saveSession(data){
     if(!data||data.ok!==true||typeof data.token!=='string'||!data.token)throw new Error(data?.message||'관리자 세션을 받지 못했습니다.');
     const expires=data.expires_at||'';
-    sessionStorage.setItem('ftma_admin_token',data.token);
-    sessionStorage.setItem('ftma_admin_expires',expires);
-    localStorage.setItem('ftma_admin_token',data.token);
-    localStorage.setItem('ftma_admin_expires',expires);
+    try{
+      sessionStorage.setItem('ftma_admin_token',data.token);
+      sessionStorage.setItem('ftma_admin_expires',expires);
+      localStorage.setItem('ftma_admin_token',data.token);
+      localStorage.setItem('ftma_admin_expires',expires);
+    }catch(_){
+      throw new Error('브라우저 저장소에 관리자 세션을 저장할 수 없습니다. 브라우저의 사이트 데이터 차단을 해제해주세요.');
+    }
   }
 
   async function requestJson(url,options,timeoutMs){
@@ -55,19 +59,11 @@
   }
 
   async function callProxy(password){
-    return requestJson('/api/admin-login',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Accept':'application/json'},
-      body:JSON.stringify({password})
-    },8000);
+    return requestJson('/api/admin-login',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({password})},8000);
   }
 
   async function callDirectRpc(password){
-    return requestJson(`${SUPABASE_URL}/rest/v1/rpc/ftma_admin_login`,{
-      method:'POST',
-      headers:{apikey:SUPABASE_KEY,'Content-Type':'application/json','Accept':'application/json'},
-      body:JSON.stringify({p_password:password})
-    },8000);
+    return requestJson(`${SUPABASE_URL}/rest/v1/rpc/ftma_admin_login`,{method:'POST',headers:{apikey:SUPABASE_KEY,'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({p_password:password})},8000);
   }
 
   async function login(){
@@ -82,6 +78,7 @@
       showApp();
       busy(false);
       input.value='';
+      // Do not navigate or submit the form. Keep the authenticated admin UI on this page.
       if(typeof window.refreshAdminData==='function')window.refreshAdminData();
     }catch(err){
       const message=err?.message==='TIMEOUT'?'로그인 서버 응답 시간이 초과되었습니다. 다시 시도해주세요.':(err?.message||'알 수 없는 오류');
@@ -90,7 +87,10 @@
     }
   }
 
-  // Never allow the login form to perform a native page navigation.
+  // Hard-block native form navigation at the document capture phase.
+  document.addEventListener('submit',e=>e.preventDefault(),true);
+  form.addEventListener('submit',e=>e.preventDefault());
+  form.noValidate=true;
   button.type='button';
   button.addEventListener('click',login);
   input.addEventListener('keydown',e=>{
@@ -100,7 +100,6 @@
       login();
     }
   });
-  form.addEventListener('submit',e=>e.preventDefault());
 
   if(!restoreSession()){
     clearSession();
