@@ -13,28 +13,45 @@
   const error=document.getElementById('adminLoginError');
   if(!form||!lock||!app||!input||!button||!error)return;
 
+  const getToken=()=>sessionStorage.getItem('ftma_admin_token')||localStorage.getItem('ftma_admin_token')||'';
+  const getExpires=()=>sessionStorage.getItem('ftma_admin_expires')||localStorage.getItem('ftma_admin_expires')||'';
   const clearSession=()=>['ftma_admin_token','ftma_admin_expires'].forEach(k=>{sessionStorage.removeItem(k);localStorage.removeItem(k)});
   const busy=v=>{button.disabled=v;button.textContent=v?'로그인 확인 중...':'관리자 페이지 입장'};
-  const openAdmin=data=>{
-    if(!data||data.ok!==true||!data.token)throw new Error(data?.message||'관리자 세션을 받지 못했습니다.');
+  const showApp=()=>{lock.hidden=true;app.hidden=false;document.body.classList.remove('admin-locked');};
+
+  function restoreSession(){
+    const token=getToken();
+    const expires=getExpires();
+    if(!token)return false;
+    if(expires){
+      const time=Date.parse(expires);
+      if(Number.isFinite(time)&&time<=Date.now()){clearSession();return false;}
+    }
+    showApp();
+    return true;
+  }
+
+  function saveSession(data){
+    if(!data||data.ok!==true||typeof data.token!=='string'||!data.token)throw new Error(data?.message||'관리자 세션을 받지 못했습니다.');
+    const expires=data.expires_at||'';
     sessionStorage.setItem('ftma_admin_token',data.token);
-    sessionStorage.setItem('ftma_admin_expires',data.expires_at||'');
+    sessionStorage.setItem('ftma_admin_expires',expires);
     localStorage.setItem('ftma_admin_token',data.token);
-    localStorage.setItem('ftma_admin_expires',data.expires_at||'');
-    lock.hidden=true;app.hidden=false;document.body.classList.remove('admin-locked');
-    if(typeof window.refreshAdminData==='function')window.refreshAdminData();
-  };
+    localStorage.setItem('ftma_admin_expires',expires);
+  }
 
   async function requestJson(url,options,timeoutMs){
     const controller=new AbortController();
-    const timer=setTimeout(()=>controller.abort(),timeoutMs);
-    try{
+    const request=(async()=>{
       const response=await fetch(url,{...options,cache:'no-store',signal:controller.signal});
       const text=await response.text();
-      let data=null;try{data=text?JSON.parse(text):null}catch(_){data=null;}
+      let data=null;
+      try{data=text?JSON.parse(text):null}catch(_){throw new Error('서버 응답이 올바른 JSON이 아닙니다.');}
       if(!response.ok)throw new Error(data?.message||data?.error||text||('HTTP '+response.status));
       return data;
-    }finally{clearTimeout(timer)}
+    })();
+    const timeout=new Promise((_,reject)=>setTimeout(()=>{controller.abort();reject(new Error('TIMEOUT'))},timeoutMs));
+    return Promise.race([request,timeout]);
   }
 
   async function callProxy(password){
@@ -42,15 +59,15 @@
       method:'POST',
       headers:{'Content-Type':'application/json','Accept':'application/json'},
       body:JSON.stringify({password})
-    },3000);
+    },8000);
   }
 
   async function callDirectRpc(password){
     return requestJson(`${SUPABASE_URL}/rest/v1/rpc/ftma_admin_login`,{
       method:'POST',
-      headers:{apikey:SUPABASE_KEY,Authorization:`Bearer ${SUPABASE_KEY}`,'Content-Type':'application/json','Accept':'application/json'},
+      headers:{apikey:SUPABASE_KEY,'Content-Type':'application/json','Accept':'application/json'},
       body:JSON.stringify({p_password:password})
-    },5000);
+    },8000);
   }
 
   async function login(e){
@@ -61,19 +78,25 @@
     busy(true);error.textContent='';
     try{
       let data;
-      try{
-        data=await callProxy(password);
-      }catch(proxyError){
-        data=await callDirectRpc(password);
-      }
-      openAdmin(data);
+      try{data=await callProxy(password)}catch(proxyError){data=await callDirectRpc(password)}
+      saveSession(data);
+      showApp();
+      busy(false);
+      input.value='';
+      if(typeof window.refreshAdminData==='function')window.refreshAdminData();
     }catch(err){
-      error.textContent=err?.name==='AbortError'?'로그인 서버 응답 시간이 초과되었습니다. 다시 시도해주세요.':'로그인 실패: '+(err?.message||'알 수 없는 오류');
+      const message=err?.message==='TIMEOUT'?'로그인 서버 응답 시간이 초과되었습니다. 다시 시도해주세요.':(err?.message||'알 수 없는 오류');
+      error.textContent='로그인 실패: '+message;
       busy(false);input.focus();
     }
   }
 
-  clearSession();button.disabled=false;button.textContent='관리자 페이지 입장';
   form.addEventListener('submit',login);
   input.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();form.requestSubmit()}});
+
+  if(!restoreSession()){
+    clearSession();
+    button.disabled=false;
+    button.textContent='관리자 페이지 입장';
+  }
 })();
