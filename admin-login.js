@@ -5,26 +5,28 @@
 
   const SUPABASE_URL='https://iloanplyuatfcwzovbpb.supabase.co';
   const SUPABASE_KEY='sb_publishable_oPXhOaLIGK05Ehw-o6jDsw_TKJODpjM';
-  const originalForm=document.getElementById('adminLoginForm');
+  const form=document.getElementById('adminLoginForm');
   const lock=document.getElementById('adminLock');
   const app=document.getElementById('adminApp');
   const input=document.getElementById('adminPassword');
   const button=document.getElementById('adminLoginButton');
   const error=document.getElementById('adminLoginError');
-  if(!originalForm||!lock||!app||!input||!button||!error)return;
-
-  // Convert the login form into a plain container immediately. This removes
-  // native form submission/implicit Enter navigation from the login flow.
-  const loginPanel=document.createElement('div');
-  loginPanel.id='adminLoginPanel';
-  while(originalForm.firstChild) loginPanel.appendChild(originalForm.firstChild);
-  originalForm.replaceWith(loginPanel);
+  if(!form||!lock||!app||!input||!button||!error)return;
 
   const getToken=()=>sessionStorage.getItem('ftma_admin_token')||localStorage.getItem('ftma_admin_token')||'';
   const getExpires=()=>sessionStorage.getItem('ftma_admin_expires')||localStorage.getItem('ftma_admin_expires')||'';
   const clearSession=()=>['ftma_admin_token','ftma_admin_expires'].forEach(k=>{sessionStorage.removeItem(k);localStorage.removeItem(k)});
   const busy=v=>{button.disabled=v;button.textContent=v?'로그인 확인 중...':'관리자 페이지 입장'};
-  const showApp=()=>{lock.hidden=true;app.hidden=false;document.body.classList.remove('admin-locked');document.body.dataset.adminAuthenticated='true'};
+
+  function showApp(){
+    document.body.classList.remove('admin-locked');
+    document.body.dataset.adminAuthenticated='true';
+    app.hidden=false;
+    app.style.display='block';
+    // Remove the login overlay entirely after successful authentication.
+    // This prevents any later script/style from restoring it.
+    if(lock&&lock.parentNode)lock.remove();
+  }
 
   function restoreSession(){
     const token=getToken();
@@ -41,28 +43,26 @@
   function saveSession(data){
     if(!data||data.ok!==true||typeof data.token!=='string'||!data.token)throw new Error(data?.message||'관리자 세션을 받지 못했습니다.');
     const expires=data.expires_at||'';
-    try{
-      sessionStorage.setItem('ftma_admin_token',data.token);
-      sessionStorage.setItem('ftma_admin_expires',expires);
-      localStorage.setItem('ftma_admin_token',data.token);
-      localStorage.setItem('ftma_admin_expires',expires);
-    }catch(_){
-      throw new Error('브라우저 저장소에 관리자 세션을 저장할 수 없습니다.');
-    }
+    sessionStorage.setItem('ftma_admin_token',data.token);
+    sessionStorage.setItem('ftma_admin_expires',expires);
+    localStorage.setItem('ftma_admin_token',data.token);
+    localStorage.setItem('ftma_admin_expires',expires);
   }
 
   async function requestJson(url,options,timeoutMs){
     const controller=new AbortController();
-    const request=(async()=>{
+    const timer=setTimeout(()=>controller.abort(),timeoutMs);
+    try{
       const response=await fetch(url,{...options,cache:'no-store',signal:controller.signal});
       const text=await response.text();
       let data=null;
       try{data=text?JSON.parse(text):null}catch(_){throw new Error('서버 응답이 올바른 JSON이 아닙니다.');}
       if(!response.ok)throw new Error(data?.message||data?.error||text||('HTTP '+response.status));
       return data;
-    })();
-    const timeout=new Promise((_,reject)=>setTimeout(()=>{controller.abort();reject(new Error('TIMEOUT'))},timeoutMs));
-    return Promise.race([request,timeout]);
+    }catch(e){
+      if(e?.name==='AbortError')throw new Error('TIMEOUT');
+      throw e;
+    }finally{clearTimeout(timer)}
   }
 
   async function callProxy(password){
@@ -87,25 +87,27 @@
       busy(false);
       if(typeof window.refreshAdminData==='function')Promise.resolve(window.refreshAdminData()).catch(()=>{});
     }catch(err){
-      const message=err?.message==='TIMEOUT'?'로그인 서버 응답 시간이 초과되었습니다. 다시 시도해주세요.':(err?.message||'알 수 없는 오류');
-      error.textContent='로그인 실패: '+message;
+      error.textContent='로그인 실패: '+(err?.message==='TIMEOUT'?'로그인 서버 응답 시간이 초과되었습니다. 다시 시도해주세요.':(err?.message||'알 수 없는 오류'));
       busy(false);input.focus();
     }
   }
 
-  button.type='button';
-  button.addEventListener('click',login);
-  input.addEventListener('keydown',e=>{
-    if(e.key==='Enter'||e.key==='NumpadEnter'){
+  // Block every native form submission on this page, including implicit Enter submission.
+  document.addEventListener('submit',e=>e.preventDefault(),true);
+  document.addEventListener('keydown',e=>{
+    if((e.key==='Enter'||e.key==='NumpadEnter')&&document.activeElement===input){
       e.preventDefault();
       e.stopImmediatePropagation();
       login();
     }
   },true);
+  button.type='button';
+  button.addEventListener('click',login);
 
   if(!restoreSession()){
     clearSession();
     button.disabled=false;
     button.textContent='관리자 페이지 입장';
   }
+  window.addEventListener('pageshow',restoreSession);
 })();
