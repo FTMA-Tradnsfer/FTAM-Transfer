@@ -16,7 +16,7 @@ module.exports = async function handler(req, res) {
 
     let response;
     try {
-      response = await fetch(`${supabaseUrl}/rest/v1/rpc/ftma_admin_login`, {
+      response = await fetch(`${supabaseUrl}/functions/v1/ftma-admin-login`, {
         method: 'POST',
         headers: {
           apikey: supabaseKey,
@@ -24,7 +24,7 @@ module.exports = async function handler(req, res) {
           'Content-Type': 'application/json',
           Accept: 'application/json'
         },
-        body: JSON.stringify({ p_password: password }),
+        body: JSON.stringify({ password }),
         cache: 'no-store',
         signal: controller.signal
       });
@@ -37,7 +37,7 @@ module.exports = async function handler(req, res) {
     try { data = text ? JSON.parse(text) : null; } catch (_) {}
 
     if (!response.ok) {
-      return res.status(response.status).json({ ok: false, message: data?.message || text || `인증 서버 오류 (${response.status})` });
+      return res.status(response.status).json({ ok: false, message: data?.message || data?.error || text || `인증 서버 오류 (${response.status})` });
     }
     if (!data?.ok || !data?.token) {
       return res.status(401).json({ ok: false, message: data?.message || '관리자 인증에 실패했습니다.' });
