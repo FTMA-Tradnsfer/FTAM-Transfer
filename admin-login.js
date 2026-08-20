@@ -23,35 +23,24 @@
     lock.hidden=true;app.hidden=false;document.body.classList.remove('admin-locked');
     if(typeof window.refreshAdminData==='function')window.refreshAdminData();
   };
-  async function callLogin(url,password,timeout){
-    const controller=new AbortController();
-    const timer=setTimeout(()=>controller.abort(),timeout);
-    try{
-      const response=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({password}),cache:'no-store',signal:controller.signal});
-      const text=await response.text();
-      let data=null;try{data=text?JSON.parse(text):null}catch(_){data=null;}
-      if(!response.ok)throw new Error(data?.message||text||('로그인 서버 오류 ('+response.status+')'));
-      return data;
-    }finally{clearTimeout(timer)}
-  }
   async function login(e){
     e.preventDefault();
     if(button.disabled)return;
     const password=input.value;
     if(!password){error.textContent='관리자 비밀번호를 입력해주세요.';return;}
     busy(true);error.textContent='';
+    const controller=new AbortController();
+    const timer=setTimeout(()=>controller.abort(),12000);
     try{
-      let data;
-      try{
-        data=await callLogin('/api/admin-login',password,4000);
-      }catch(proxyError){
-        data=await callLogin(LOGIN_FUNCTION,password,7000);
-      }
+      const response=await fetch(LOGIN_FUNCTION,{method:'POST',mode:'cors',credentials:'omit',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({password}),cache:'no-store',signal:controller.signal});
+      const text=await response.text();
+      let data=null;try{data=text?JSON.parse(text):null}catch(_){data=null;}
+      if(!response.ok)throw new Error(data?.message||text||('로그인 서버 오류 ('+response.status+')'));
       openAdmin(data);
     }catch(err){
-      error.textContent=err?.name==='AbortError'?'로그인 서버 응답 시간이 초과되었습니다. 다시 시도해주세요.':'로그인 실패: '+(err?.message||'알 수 없는 오류');
+      error.textContent=err?.name==='AbortError'?'로그인 서버 응답 시간이 초과되었습니다. 잠시 후 다시 시도해주세요.':'로그인 실패: '+(err?.message||'알 수 없는 오류');
       busy(false);input.focus();
-    }
+    }finally{clearTimeout(timer)}
   }
 
   clearSession();
