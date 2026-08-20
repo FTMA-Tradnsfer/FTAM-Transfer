@@ -5,19 +5,26 @@
 
   const SUPABASE_URL='https://iloanplyuatfcwzovbpb.supabase.co';
   const SUPABASE_KEY='sb_publishable_oPXhOaLIGK05Ehw-o6jDsw_TKJODpjM';
-  const form=document.getElementById('adminLoginForm');
+  const originalForm=document.getElementById('adminLoginForm');
   const lock=document.getElementById('adminLock');
   const app=document.getElementById('adminApp');
   const input=document.getElementById('adminPassword');
   const button=document.getElementById('adminLoginButton');
   const error=document.getElementById('adminLoginError');
-  if(!form||!lock||!app||!input||!button||!error)return;
+  if(!originalForm||!lock||!app||!input||!button||!error)return;
+
+  // Convert the login form into a plain container immediately. This removes
+  // native form submission/implicit Enter navigation from the login flow.
+  const loginPanel=document.createElement('div');
+  loginPanel.id='adminLoginPanel';
+  while(originalForm.firstChild) loginPanel.appendChild(originalForm.firstChild);
+  originalForm.replaceWith(loginPanel);
 
   const getToken=()=>sessionStorage.getItem('ftma_admin_token')||localStorage.getItem('ftma_admin_token')||'';
   const getExpires=()=>sessionStorage.getItem('ftma_admin_expires')||localStorage.getItem('ftma_admin_expires')||'';
   const clearSession=()=>['ftma_admin_token','ftma_admin_expires'].forEach(k=>{sessionStorage.removeItem(k);localStorage.removeItem(k)});
   const busy=v=>{button.disabled=v;button.textContent=v?'로그인 확인 중...':'관리자 페이지 입장'};
-  const showApp=()=>{lock.hidden=true;app.hidden=false;document.body.classList.remove('admin-locked');};
+  const showApp=()=>{lock.hidden=true;app.hidden=false;document.body.classList.remove('admin-locked');document.body.dataset.adminAuthenticated='true'};
 
   function restoreSession(){
     const token=getToken();
@@ -40,7 +47,7 @@
       localStorage.setItem('ftma_admin_token',data.token);
       localStorage.setItem('ftma_admin_expires',expires);
     }catch(_){
-      throw new Error('브라우저 저장소에 관리자 세션을 저장할 수 없습니다. 브라우저의 사이트 데이터 차단을 해제해주세요.');
+      throw new Error('브라우저 저장소에 관리자 세션을 저장할 수 없습니다.');
     }
   }
 
@@ -75,11 +82,10 @@
       let data;
       try{data=await callProxy(password)}catch(proxyError){data=await callDirectRpc(password)}
       saveSession(data);
+      input.value='';
       showApp();
       busy(false);
-      input.value='';
-      // Do not navigate or submit the form. Keep the authenticated admin UI on this page.
-      if(typeof window.refreshAdminData==='function')window.refreshAdminData();
+      if(typeof window.refreshAdminData==='function')Promise.resolve(window.refreshAdminData()).catch(()=>{});
     }catch(err){
       const message=err?.message==='TIMEOUT'?'로그인 서버 응답 시간이 초과되었습니다. 다시 시도해주세요.':(err?.message||'알 수 없는 오류');
       error.textContent='로그인 실패: '+message;
@@ -87,19 +93,15 @@
     }
   }
 
-  // Hard-block native form navigation at the document capture phase.
-  document.addEventListener('submit',e=>e.preventDefault(),true);
-  form.addEventListener('submit',e=>e.preventDefault());
-  form.noValidate=true;
   button.type='button';
   button.addEventListener('click',login);
   input.addEventListener('keydown',e=>{
-    if(e.key==='Enter'){
+    if(e.key==='Enter'||e.key==='NumpadEnter'){
       e.preventDefault();
-      e.stopPropagation();
+      e.stopImmediatePropagation();
       login();
     }
-  });
+  },true);
 
   if(!restoreSession()){
     clearSession();
