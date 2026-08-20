@@ -4,7 +4,7 @@
   window.__FTMA_ADMIN_LOGIN_BOUND__=true;
 
   const SUPABASE_URL='https://iloanplyuatfcwzovbpb.supabase.co';
-  const SUPABASE_KEY='sb_publishable_oPXhOaLIGK05Ehw-o6jDsw_TKJODpjM';
+  const SUPABASE_KEY='sb_publishable_oPXhOaLIGK05Ehw-o6jDSw_TKJODpjM';
   const form=document.getElementById('adminLoginForm');
   const lock=document.getElementById('adminLock');
   const app=document.getElementById('adminApp');
@@ -70,11 +70,10 @@
     },8000);
   }
 
-  async function login(e){
-    e.preventDefault();
+  async function login(){
     if(button.disabled)return;
     const password=input.value;
-    if(!password){error.textContent='관리자 비밀번호를 입력해주세요.';return;}
+    if(!password){error.textContent='관리자 비밀번호를 입력해주세요.';input.focus();return;}
     busy(true);error.textContent='';
     try{
       let data;
@@ -91,8 +90,17 @@
     }
   }
 
-  form.addEventListener('submit',login);
-  input.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();form.requestSubmit()}});
+  // Never allow the login form to perform a native page navigation.
+  button.type='button';
+  button.addEventListener('click',login);
+  input.addEventListener('keydown',e=>{
+    if(e.key==='Enter'){
+      e.preventDefault();
+      e.stopPropagation();
+      login();
+    }
+  });
+  form.addEventListener('submit',e=>e.preventDefault());
 
   if(!restoreSession()){
     clearSession();
