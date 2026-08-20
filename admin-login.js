@@ -4,7 +4,7 @@
   window.__FTMA_ADMIN_LOGIN_BOUND__=true;
 
   const SUPABASE_URL='https://iloanplyuatfcwzovbpb.supabase.co';
-  const SUPABASE_KEY='sb_publishable_oPXhOaLIGK05Ehw-o6jDSw_TKJODpjM';
+  const SUPABASE_KEY='sb_publishable_oPXhOaLIGK05Ehw-o6jDsw_TKJODpjM';
   const form=document.getElementById('adminLoginForm');
   const lock=document.getElementById('adminLock');
   const app=document.getElementById('adminApp');
