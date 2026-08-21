@@ -17,10 +17,20 @@
 .market-directory-row .market-player-main b{display:block!important;color:#eee!important;font-size:14px!important;line-height:1.35!important;white-space:normal!important;overflow-wrap:anywhere!important}
 .market-directory-row .market-player-main small{display:block!important;color:#918d84!important;font-size:10px!important;line-height:1.45!important;margin-top:6px!important;white-space:normal!important;overflow-wrap:anywhere!important}
 .market-directory-row>strong{grid-column:2!important;justify-self:end!important;text-align:right!important;font-size:14px!important;font-weight:900!important;color:#efdcaf!important;white-space:nowrap!important}
-.market-directory-row>strong:before{content:'MARKET VALUE';display:block;margin-bottom:5px;font-size:7px;line-height:1;color:#6f695e;font-weight:700;letter-spacing:1px}
+.market-directory-row>strong:before{content:'MARKET VALUE';display:block;margin-bottom:5px;font-size:7px;line-height:1;color:#6f695e;font-weight:700;letter-spacing:1px!important}
 .market-directory-row>.status{grid-column:3!important;justify-self:end!important;min-width:75px!important}
 .market-directory-row:hover{background:#17191c!important}
 .directory-table{overflow:hidden!important}
+
+/* Featured home news: keep the image visible by anchoring the headline lower-left and constraining its width. */
+.featured-overlay{left:32px!important;right:auto!important;bottom:22px!important;width:min(68%,560px)!important}
+.featured-overlay h1{font-size:26px!important;line-height:1.18!important;margin:0 0 8px!important}
+.featured-overlay p{max-width:520px!important}
+@media(max-width:900px){
+  .featured-overlay{left:20px!important;bottom:18px!important;width:72%!important}
+  .featured-overlay h1{font-size:22px!important;line-height:1.2!important}
+  .featured-overlay p{font-size:9px!important;line-height:1.5!important;margin-bottom:10px!important}
+}
 
 @media(max-width:1000px){
   .market-directory-row{grid-template-columns:minmax(0,1fr) 110px!important;gap:10px!important;min-height:82px!important;padding:10px 14px!important}
