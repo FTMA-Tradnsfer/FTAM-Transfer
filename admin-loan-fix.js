@@ -1,0 +1,13 @@
+/* FTMA: manual loan-status control */
+(async()=>{
+  const original=window.editPlayerF;
+  if(typeof original!=='function')return;
+  window.editPlayerF=async id=>{
+    const p=dataF.players.find(x=>x.id===id);if(!p)return;
+    let fresh=p;
+    try{const rows=await getF(`${AMF_URL}/rest/v1/players?select=id,name,photo_url,nationality,position,birth_date,age,ability,potential,market_value,current_club_id,shirt_number,squad_type,is_loan,status&id=eq.${encodeURIComponent(id)}`);if(rows[0])fresh=rows[0]}catch(e){console.warn('[FTMA loan]',e)}
+    const loanOptions=[{v:'false',t:'아니오 — 임대 아님'},{v:'true',t:'예 — 현재 임대 중'}];
+    const m=modalF('선수 정보 수정',fieldF('name','선수명',fresh.name)+fieldF('nationality','국적',fresh.nationality||'')+fieldF('position','포지션',fresh.position||'')+fieldF('birth_date','생년월일',fresh.birth_date||'','date')+fieldF('age','나이',fresh.age??'','number')+fieldF('ability','어빌',fresh.ability??'','number')+fieldF('potential','포텐',fresh.potential??'','number')+fieldF('market_value','시장가치',fresh.market_value??'','number')+selectF('current_club_id','소속 구단',fresh.current_club_id||'',[{v:'',t:'미소속'},...dataF.clubs.map(c=>({v:c.id,t:c.name}))])+selectF('squad_type','선수단 유형',fresh.squad_type||'first_team',[{v:'first_team',t:'1군'},{v:'u20',t:'U20'}])+fieldF('shirt_number','등번호',fresh.shirt_number??'','number')+selectF('is_loan','현재 임대 상태',String(!!fresh.is_loan),loanOptions)+fileF('photo_file','선수 이미지 교체',fresh.photo_url)+`<div style="grid-column:1/-1;border:1px solid #514731;background:#151719;padding:12px;color:#9d9587;font-size:9px;line-height:1.6">이 값은 <b style="color:#e2c985">이적 기록과 별개</b>로 관리됩니다. 실제 임대 이적 기록이 없어도 관리자 판단으로 임대 중으로 표시할 수 있습니다.</div>`);
+    m.querySelector('[data-save]').onclick=async()=>{const b=m.querySelector('[data-save]'),e=m.querySelector('.fix-error');b.disabled=true;b.textContent='저장 중...';try{const f=new FormData(m.querySelector('form'));const pyl={name:String(f.get('name')||''),nationality:String(f.get('nationality')||''),position:String(f.get('position')||''),birth_date:String(f.get('birth_date')||''),age:numF(f,'age'),ability:numF(f,'ability'),potential:numF(f,'potential'),market_value:numF(f,'market_value'),current_club_id:String(f.get('current_club_id')||''),squad_type:String(f.get('squad_type')||'first_team'),shirt_number:numF(f,'shirt_number'),is_loan:String(f.get('is_loan'))==='true'};const file=f.get('photo_file');if(file instanceof File&&file.size)pyl.photo_url=await uploadF(file,'players');await mutateF('players','update',id,pyl);m.remove();messageF('선수 정보와 임대 상태가 수정되었습니다.');await loadManagerF()}catch(x){e.textContent=x.message;b.disabled=false;b.textContent='저장'}};
+  };
+})();
