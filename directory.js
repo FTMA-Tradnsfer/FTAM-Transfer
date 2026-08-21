@@ -1,9 +1,85 @@
-const SUPABASE_URL='https://iloanplyuatfcwzovbpb.supabase.co';const SUPABASE_KEY='sb_publishable_oPXhOaLIGK05Ehw-o6jDsw_TKJODpjM';const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);const esc=s=>String(s??'').replace(/[&<>\"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#039;'}[m]));const money=(v,c='EUR')=>`${c==='EUR'?'€':c==='GBP'?'£':'$'}${Number(v||0).toFixed(1)}M`;const ageOf=p=>typeof window.ftmaAgeOr==='function'?window.ftmaAgeOr(p.birth_date,p.age??'—'):(p.age??'—');
-async function getPlayers(){const fields='id,name,photo_url,nationality,position,ability,potential,market_value,status,current_club_id,age,birth_date,shirt_number,squad_type,is_loan';let {data,error}=await db.from('players').select(fields).order('market_value',{ascending:false});if(error){console.warn('players query with is_loan failed; retrying without loan column',error);const fallback=await db.from('players').select(fields.replace(',is_loan','')).order('market_value',{ascending:false});data=fallback.data;error=fallback.error;if(error)throw error}const players=data||[];const clubIds=[...new Set(players.map(p=>p.current_club_id).filter(Boolean))];if(!clubIds.length)return players.map(p=>({...p,clubs:null,is_loan:Boolean(p.is_loan)}));const {data:clubs,error:clubError}=await db.from('clubs').select('id,name').in('id',clubIds);if(clubError){console.warn('club lookup failed',clubError);return players.map(p=>({...p,clubs:null,is_loan:Boolean(p.is_loan)}))}const map=new Map((clubs||[]).map(c=>[c.id,c]));return players.map(p=>({...p,clubs:map.get(p.current_club_id)||null,is_loan:Boolean(p.is_loan)}))}
-async function getClubs(){const {data,error}=await db.from('clubs').select('id,name,league,description,logo_url').order('name');if(error)throw error;return data||[]}async function getTransfers(){const {data,error}=await db.from('transfers').select('id,player_id,from_club_id,to_club_id,from_club_name,to_club_name,from_club_image_url,to_club_image_url,transfer_fee,fee_currency,transfer_date,transfer_type,status,announcement_image_url,notes,players(name,photo_url),from_club:clubs!transfers_from_club_id_fkey(name,logo_url),to_club:clubs!transfers_to_club_id_fkey(name,logo_url)').order('transfer_date',{ascending:false}).order('created_at',{ascending:false});if(error)throw error;return data||[]}
+const SUPABASE_URL='https://iloanplyuatfcwzovbpb.supabase.co';
+const SUPABASE_KEY='sb_publishable_oPXhOaLIGK05Ehw-o6jDsw_TKJODpjM';
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const esc=s=>String(s??'').replace(/[&<>\"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#039;'}[m]));
+const money=(v,c='EUR')=>`${c==='EUR'?'€':c==='GBP'?'£':'$'}${Number(v||0).toFixed(1)}M`;
+const ageOf=p=>typeof window.ftmaAgeOr==='function'?window.ftmaAgeOr(p.birth_date,p.age??'—'):(p.age??'—');
+
+async function getPlayers(){
+  const base='id,name,photo_url,nationality,position,ability,potential,market_value,status,current_club_id,age,birth_date,shirt_number,squad_type,clubs(name)';
+  let r=await db.from('players').select(base+',is_loan').order('market_value',{ascending:false});
+  if(r.error){
+    console.warn('players query with is_loan failed; retrying without loan column',r.error);
+    r=await db.from('players').select(base).order('market_value',{ascending:false});
+  }
+  if(r.error)throw r.error;
+  return (r.data||[]).map(p=>({...p,is_loan:Boolean(p.is_loan),clubs:p.clubs||null}));
+}
+
+async function getClubs(){
+  const {data,error}=await db.from('clubs').select('id,name,country,league,description,logo_url').order('name');
+  if(error)throw error;
+  return data||[];
+}
+
+async function getTransfers(){
+  const {data,error}=await db.from('transfers').select('id,player_id,from_club_id,to_club_id,from_club_name,to_club_name,from_club_image_url,to_club_image_url,transfer_fee,fee_currency,transfer_date,transfer_type,status,announcement_image_url,notes,players(name,photo_url),from_club:clubs!transfers_from_club_id_fkey(name,logo_url),to_club:clubs!transfers_to_club_id_fkey(name,logo_url)').order('transfer_date',{ascending:false}).order('created_at',{ascending:false});
+  if(error)throw error;
+  return data||[];
+}
+
 function loanBadge(p){return p.is_loan?'<span class="player-loan-badge" title="현재 임대 중">임대</span>':''}
-function renderPlayers(list){const box=document.getElementById('playerList');if(!box)return;document.getElementById('playerCount').textContent=`${list.length}명`;box.innerHTML=list.length?list.map((p,i)=>{const number=p.shirt_number!=null?`#${p.shirt_number}`:'번호 —';const squad=p.squad_type==='u20'?'U20':'1군';return `<a class="directory-player${p.is_loan?' is-loan':''}" href="player.html?id=${encodeURIComponent(p.id)}"><div class="directory-player-media">${p.photo_url?`<img class="directory-player-photo" src="${esc(p.photo_url)}" alt="${esc(p.name)}" loading="lazy" decoding="async" onerror="this.classList.add('image-load-error')">`:`<div class="directory-player-photo directory-player-photo-empty" aria-hidden="true">FTMA</div>`}</div><div class="player-rank">${String(i+1).padStart(2,'0')}</div><div class="directory-player-main"><div class="directory-player-title"><h3>${esc(p.name)}</h3><span class="player-shirt-badge">${esc(number)}</span>${loanBadge(p)}</div><p>${esc(p.nationality||'국적 미상')} · ${esc(p.position||'포지션 미정')} · ${esc(p.clubs?.name||'미소속')}</p><div class="player-stats"><span>${squad}</span><span>나이 <b>${ageOf(p)}</b></span><span>어빌 <b>${p.ability??'—'}</b></span><span>포텐 <b>${p.potential??'—'}</b></span></div></div><strong class="player-value">${money(p.market_value)}</strong></a>`}).join(''):'<div class="loading">검색 결과가 없습니다.</div>'}
-function renderClubs(list,players){const box=document.getElementById('clubList');if(!box)return;document.getElementById('clubCount').textContent=`${list.length}구단`;box.innerHTML=list.length?list.map(c=>{const count=players.filter(p=>p.current_club_id===c.id).length;const mark=c.logo_url?`<img class="club-logo" src="${esc(c.logo_url)}" alt="${esc(c.name)} 로고" loading="lazy" decoding="async">`:`<span class="club-mark-fallback">${esc((c.name||'FT').slice(0,2).toUpperCase())}</span>`;return `<a class="directory-club" href="club.html?id=${encodeURIComponent(c.id)}"><div class="club-mark">${mark}</div><div class="club-info"><h3>${esc(c.name)}</h3><p>${esc(c.league||'리그 미상')}</p>${c.description?`<small>${esc(c.description)}</small>`:''}</div><strong>${count}<small>명</small></strong></a>`}).join(''):'<div class="loading">검색 결과가 없습니다.</div>'}
-function renderMarket(list){const box=document.getElementById('marketList');if(!box)return;document.getElementById('marketCount').textContent=`${list.length}명`;box.innerHTML=list.length?list.map((p,i)=>`<a class="market-directory-row${p.is_loan?' is-loan':''}" href="player.html?id=${encodeURIComponent(p.id)}"><div class="market-player-cell">${p.photo_url?`<img class="market-player-photo" src="${esc(p.photo_url)}" alt="${esc(p.name)}" loading="lazy" decoding="async">`:''}<span class="player-rank">${String(i+1).padStart(2,'0')}</span><div class="market-player-main"><div class="market-player-name-line"><b>${esc(p.name)}</b>${loanBadge(p)}</div><small>${esc(p.position||'미정')} · ${esc(p.nationality||'국적 미상')} · ${esc(p.clubs?.name||'미소속')} · ${ageOf(p)}세 · ${p.shirt_number!=null?`#${p.shirt_number}`:'번호 미등록'}</small></div></div><strong>${money(p.market_value)}</strong><em class="status ${p.status==='available'?'open':'hot'}">${p.status==='available'?'시장 등록':'기록 관리'}</em></a>`).join(''):'<div class="loading">등록된 선수가 없습니다.</div>'}
-function renderTransfers(list){const box=document.getElementById('transferList');if(!box)return;document.getElementById('transferCount').textContent=`${list.length}건`;box.innerHTML=list.length?list.map(t=>{const type=t.transfer_type==='loan'?'임대':t.transfer_type==='free'?'자유계약':t.transfer_type==='loan_return'?'임대 복귀':'완전 이적';const status=t.status==='official'?'공식':t.status==='pending'?'진행 중':'무산';const image=t.announcement_image_url||t.players?.photo_url||'';const from=t.from_club?.name||t.from_club_name||'미소속',to=t.to_club?.name||t.to_club_name||'미소속';const fromImg=t.from_club_image_url||t.from_club?.logo_url||'',toImg=t.to_club_image_url||t.to_club?.logo_url||'';const date=new Date(t.transfer_date);const dateYear=Number.isNaN(date.getTime())?'—':date.getFullYear();const dateText=Number.isNaN(date.getTime())?'—':`${String(date.getMonth()+1).padStart(2,'0')}.${String(date.getDate()).padStart(2,'0')}`;return `<article class="record-row transfer-record-row"><div class="transfer-date"><small>${dateYear}</small><strong>${dateText}</strong></div><div class="transfer-player"><a href="player.html?id=${encodeURIComponent(t.player_id)}">${image?`<img class="transfer-player-photo" src="${esc(image)}" alt="${esc(t.players?.name||'선수')}" loading="lazy" decoding="async">`:''}<div><h3>${esc(t.players?.name||'알 수 없는 선수')}</h3><span>${esc(t.players?.position||'포지션 미정')}</span></div></a></div><div class="transfer-club transfer-from"><small>원소속</small>${fromImg?`<img src="${esc(fromImg)}" alt="" loading="lazy" decoding="async">`:''}<strong>${esc(from)}</strong></div><div class="transfer-center"><small>이적료</small><b>→</b><strong>${t.transfer_fee==null?'비공개':money(t.transfer_fee,t.fee_currency)}</strong><em>${esc(type)} · ${esc(status)}</em></div><div class="transfer-club transfer-to"><small>이적 팀</small>${toImg?`<img src="${esc(toImg)}" alt="" loading="lazy" decoding="async">`:''}<strong>${esc(to)}</strong></div></article>`}).join(''):'<div class="loading">등록된 이적 기록이 없습니다.</div>'}
-async function boot(){try{const path=location.pathname.split('/').pop();if(path==='players.html'){const all=await getPlayers();renderPlayers(all);document.getElementById('playerSearch')?.addEventListener('input',e=>{const q=e.target.value.trim().toLowerCase();renderPlayers(all.filter(p=>[p.name,p.nationality,p.position,p.clubs?.name].some(v=>String(v||'').toLowerCase().includes(q))))}]}else if(path==='clubs.html'){const [clubs,players]=await Promise.all([getClubs(),getPlayers()]);renderClubs(clubs.filter(Boolean),players)}else if(path==='transfer-records.html'){renderTransfers(await getTransfers())}else{renderMarket(await getPlayers())}}catch(e){console.error('FTMA directory load failed',e);const target=document.querySelector('#marketList,#transferList,#playerList,#clubList');if(target)target.innerHTML=`<div class="loading">데이터를 불러오지 못했습니다. 잠시 후 새로고침해 주세요.</div>`}}boot();
+
+function renderPlayers(list){
+  const box=document.getElementById('playerList');if(!box)return;
+  document.getElementById('playerCount').textContent=`${list.length}명`;
+  box.innerHTML=list.length?list.map((p,i)=>{
+    const number=p.shirt_number!=null?`#${p.shirt_number}`:'번호 —';
+    const squad=p.squad_type==='u20'?'U20':'1군';
+    return `<a class="directory-player${p.is_loan?' is-loan':''}" href="player.html?id=${encodeURIComponent(p.id)}"><div class="directory-player-media">${p.photo_url?`<img class="directory-player-photo" src="${esc(p.photo_url)}" alt="${esc(p.name)}" loading="lazy" decoding="async" onerror="this.classList.add('image-load-error')">`:`<div class="directory-player-photo directory-player-photo-empty" aria-hidden="true">FTMA</div>`}</div><div class="player-rank">${String(i+1).padStart(2,'0')}</div><div class="directory-player-main"><div class="directory-player-title"><h3>${esc(p.name)}</h3><span class="player-shirt-badge">${esc(number)}</span>${loanBadge(p)}</div><p>${esc(p.nationality||'국적 미상')} · ${esc(p.position||'포지션 미정')} · ${esc(p.clubs?.name||'미소속')}</p><div class="player-stats"><span>${squad}</span><span>나이 <b>${ageOf(p)}</b></span><span>어빌 <b>${p.ability??'—'}</b></span><span>포텐 <b>${p.potential??'—'}</b></span></div></div><strong class="player-value">${money(p.market_value)}</strong></a>`
+  }).join(''):'<div class="loading">검색 결과가 없습니다.</div>';
+}
+
+function renderClubs(list,players){
+  const box=document.getElementById('clubList');if(!box)return;
+  document.getElementById('clubCount').textContent=`${list.length}구단`;
+  box.innerHTML=list.length?list.map(c=>{
+    const count=players.filter(p=>p.current_club_id===c.id).length;
+    const mark=c.logo_url?`<img class="club-logo" src="${esc(c.logo_url)}" alt="${esc(c.name)} 로고" loading="lazy" decoding="async">`:`<span class="club-mark-fallback">${esc((c.name||'FT').slice(0,2).toUpperCase())}</span>`;
+    return `<a class="directory-club" href="club.html?id=${encodeURIComponent(c.id)}"><div class="club-mark">${mark}</div><div class="club-info"><h3>${esc(c.name)}</h3><p>${esc(c.league||'리그 미상')}</p>${c.description?`<small>${esc(c.description)}</small>`:''}</div><strong>${count}<small>명</small></strong></a>`
+  }).join(''):'<div class="loading">검색 결과가 없습니다.</div>';
+}
+
+function renderMarket(list){
+  const box=document.getElementById('marketList');if(!box)return;
+  document.getElementById('marketCount').textContent=`${list.length}명`;
+  box.innerHTML=list.length?list.map((p,i)=>`<a class="market-directory-row${p.is_loan?' is-loan':''}" href="player.html?id=${encodeURIComponent(p.id)}"><div class="market-player-cell">${p.photo_url?`<img class="market-player-photo" src="${esc(p.photo_url)}" alt="${esc(p.name)}" loading="lazy" decoding="async">`:''}<span class="player-rank">${String(i+1).padStart(2,'0')}</span><div class="market-player-main"><div class="market-player-name-line"><b>${esc(p.name)}</b>${loanBadge(p)}</div><small>${esc(p.position||'미정')} · ${esc(p.nationality||'국적 미상')} · ${esc(p.clubs?.name||'미소속')} · ${ageOf(p)}세 · ${p.shirt_number!=null?`#${p.shirt_number}`:'번호 미등록'}</small></div></div><strong>${money(p.market_value)}</strong><em class="status ${p.status==='available'?'open':'hot'}">${p.status==='available'?'시장 등록':'기록 관리'}</em></a>`).join(''):'<div class="loading">등록된 선수가 없습니다.</div>';
+}
+
+function renderTransfers(list){
+  const box=document.getElementById('transferList');if(!box)return;
+  document.getElementById('transferCount').textContent=`${list.length}건`;
+  box.innerHTML=list.length?list.map(t=>{const type=t.transfer_type==='loan'?'임대':t.transfer_type==='free'?'자유계약':t.transfer_type==='loan_return'?'임대 복귀':'완전 이적';const status=t.status==='official'?'공식':t.status==='pending'?'진행 중':'무산';const image=t.announcement_image_url||t.players?.photo_url||'';const from=t.from_club?.name||t.from_club_name||'미소속',to=t.to_club?.name||t.to_club_name||'미소속';const fromImg=t.from_club_image_url||t.from_club?.logo_url||'',toImg=t.to_club_image_url||t.to_club?.logo_url||'';const date=new Date(t.transfer_date);const dateYear=Number.isNaN(date.getTime())?'—':date.getFullYear();const dateText=Number.isNaN(date.getTime())?'—':`${String(date.getMonth()+1).padStart(2,'0')}.${String(date.getDate()).padStart(2,'0')}`;return `<article class="record-row transfer-record-row"><div class="transfer-date"><small>${dateYear}</small><strong>${dateText}</strong></div><div class="transfer-player"><a href="player.html?id=${encodeURIComponent(t.player_id)}">${image?`<img class="transfer-player-photo" src="${esc(image)}" alt="${esc(t.players?.name||'선수')}" loading="lazy" decoding="async">`:''}<div><h3>${esc(t.players?.name||'알 수 없는 선수')}</h3><span>${esc(t.players?.position||'포지션 미정')}</span></div></a></div><div class="transfer-club transfer-from"><small>원소속</small>${fromImg?`<img src="${esc(fromImg)}" alt="" loading="lazy" decoding="async">`:''}<strong>${esc(from)}</strong></div><div class="transfer-center"><small>이적료</small><b>→</b><strong>${t.transfer_fee==null?'비공개':money(t.transfer_fee,t.fee_currency)}</strong><em>${esc(type)} · ${esc(status)}</em></div><div class="transfer-club transfer-to"><small>이적 팀</small>${toImg?`<img src="${esc(toImg)}" alt="" loading="lazy" decoding="async">`:''}<strong>${esc(to)}</strong></div></article>`}).join(''):'<div class="loading">등록된 이적 기록이 없습니다.</div>';
+}
+
+async function boot(){
+  try{
+    const path=(location.pathname.split('/').pop()||'index.html').split('?')[0];
+    if(path==='players.html'){
+      const all=await getPlayers();renderPlayers(all);
+      document.getElementById('playerSearch')?.addEventListener('input',e=>{const q=e.target.value.trim().toLowerCase();renderPlayers(all.filter(p=>[p.name,p.nationality,p.position,p.clubs?.name].some(v=>String(v||'').toLowerCase().includes(q))))});
+    }else if(path==='clubs.html'){
+      const [clubData,playerData]=await Promise.all([getClubs(),getPlayers()]);renderClubs(clubData,playerData);
+      document.getElementById('clubSearch')?.addEventListener('input',e=>{const q=e.target.value.trim().toLowerCase();renderClubs(clubData.filter(c=>[c.name,c.country,c.league].some(v=>String(v||'').toLowerCase().includes(q))),playerData)});
+    }else if(path==='transfer-records.html'){
+      renderTransfers(await getTransfers());
+    }else{
+      renderMarket(await getPlayers());
+    }
+  }catch(e){
+    console.error('FTMA directory load failed',e);
+    const target=document.querySelector('#marketList,#transferList,#playerList,#clubList');
+    if(target)target.innerHTML='<div class="loading">데이터를 불러오지 못했습니다. 잠시 후 새로고침해 주세요.</div>';
+  }
+}
+boot();
