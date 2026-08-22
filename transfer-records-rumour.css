@@ -1,0 +1,10 @@
+.transfer-record-row.is-rumour{background:linear-gradient(90deg,rgba(202,169,104,.055),transparent 42%)}
+.transfer-record-row.is-rumour .transfer-player h3{color:#f1dfb6}
+.transfer-rumour-badge{display:inline-flex!important;align-items:center;justify-content:center;margin:8px 0 0 8px!important;padding:4px 8px!important;border:1px solid #8f7340!important;background:#211b10!important;color:#e3c47f!important;font-size:8px!important;font-weight:700;letter-spacing:.5px;line-height:1!important;vertical-align:middle}
+.transfer-record-row.is-rumour .transfer-center em{color:#d2b46f!important;font-weight:600}
+.transfer-record-row.is-rumour .transfer-center>strong{color:#e8d3a0}
+@media(max-width:560px){
+  .transfer-rumour-badge{margin:6px 0 0 0!important;padding:3px 7px!important;font-size:7px!important;display:flex!important;width:max-content}
+  .transfer-record-row.is-rumour .transfer-player{padding-bottom:12px}
+  .transfer-record-row.is-rumour .transfer-center em{font-size:8px!important}
+}
