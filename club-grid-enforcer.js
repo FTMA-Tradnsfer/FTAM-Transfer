@@ -5,12 +5,12 @@
   function apply(){
     const cards=Array.from(grid.children).filter(el=>el.classList.contains('directory-club'));
     const mobile=window.matchMedia('(max-width: 900px)').matches;
-    const rowCount=mobile?cards.length:Math.ceil(cards.length/2);
+    const rowCount=mobile?cards.length:Math.max(1,Math.ceil(cards.length/2));
 
     grid.style.setProperty('display','grid','important');
-    grid.style.setProperty('grid-template-columns',mobile?'minmax(0,1fr)':'minmax(0,1fr) minmax(0,1fr)','important');
-    grid.style.setProperty('grid-template-rows',`repeat(${Math.max(rowCount,1)}, 104px)`,'important');
-    grid.style.setProperty('grid-auto-flow','row','important');
+    grid.style.setProperty('grid-template-columns',mobile?'minmax(0,1fr)':'repeat(2,minmax(0,1fr))','important');
+    grid.style.setProperty('grid-template-rows',`repeat(${rowCount},104px)`,'important');
+    grid.style.setProperty('grid-auto-flow','none','important');
     grid.style.setProperty('align-items','stretch','important');
     grid.style.setProperty('align-content','start','important');
     grid.style.setProperty('gap','14px','important');
@@ -31,9 +31,9 @@
       card.style.setProperty('height','104px','important');
       card.style.setProperty('min-height','104px','important');
       card.style.setProperty('max-height','104px','important');
-      card.style.setProperty('grid-area',`${row} / ${col} / ${row} / ${col}`,'important');
-      card.style.setProperty('grid-column',String(col),'important');
-      card.style.setProperty('grid-row',String(row),'important');
+      card.style.setProperty('grid-area',`${row} / ${col} / span 1 / span 1`,'important');
+      card.style.setProperty('grid-column','auto','important');
+      card.style.setProperty('grid-row','auto','important');
       card.style.setProperty('margin','0','important');
       card.style.setProperty('position','static','important');
       card.style.setProperty('float','none','important');
