@@ -1,0 +1,26 @@
+/* FTMA club directory layout fix — 2026-08-24 */
+.club-directory-grid{
+  display:grid !important;
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  grid-auto-flow:row !important;
+  grid-auto-rows:max-content !important;
+  align-items:start !important;
+  align-content:start !important;
+}
+.club-directory-grid > .directory-club{
+  position:static !important;
+  grid-column:auto !important;
+  grid-row:auto !important;
+  align-self:start !important;
+  justify-self:stretch !important;
+  height:auto !important;
+  min-height:0 !important;
+  max-height:none !important;
+  width:auto !important;
+  float:none !important;
+}
+@media(max-width:900px){
+  .club-directory-grid{
+    grid-template-columns:1fr !important;
+  }
+}
