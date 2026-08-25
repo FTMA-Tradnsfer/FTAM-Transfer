@@ -5,8 +5,8 @@
   const allowed=new Set(['default','summer','winter']);
   const labels={default:'FTMA DEFAULT',summer:'☀️ SUMMER TRANSFER WINDOW',winter:'❄️ WINTER TRANSFER WINDOW'};
   function ensureEffects(){
-    if(!document.getElementById('ftma-season-effects-css')){const link=document.createElement('link');link.id='ftma-season-effects-css';link.rel='stylesheet';link.href='season-effects.css?v=20260826scene7';document.head.appendChild(link)}
-    if(!document.getElementById('ftma-season-readable-css')){const link=document.createElement('link');link.id='ftma-season-readable-css';link.rel='stylesheet';link.href='theme-readable.css?v=20260826read2';document.head.appendChild(link)}
+    if(!document.getElementById('ftma-season-effects-css')){const link=document.createElement('link');link.id='ftma-season-effects-css';link.rel='stylesheet';link.href='season-effects.css?v=20260826scene8';document.head.appendChild(link)}
+    if(!document.getElementById('ftma-season-readable-css')){const link=document.createElement('link');link.id='ftma-season-readable-css';link.rel='stylesheet';link.href='theme-readable.css?v=20260826read3';document.head.appendChild(link)}
     let fx=document.getElementById('ftmaSeasonFx');
     if(!fx){fx=document.createElement('div');fx.id='ftmaSeasonFx';fx.className='ftma-season-fx';document.body.appendChild(fx)}
     return fx;
