@@ -1,48 +1,35 @@
 /* FTMA seasonal motion + login/portal skin */
 
 /* Animated seasonal atmosphere */
-.ftma-season-fx{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-.ftma-season-fx .fx-item{position:absolute;pointer-events:none;user-select:none}
-
-/* SUMMER: sunlight, bubbles, sea mist and moving wave bands */
+.ftma-season-fx{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}.ftma-season-fx .fx-item{position:absolute;pointer-events:none;user-select:none}
 body[data-ftma-theme="summer"] .ftma-season-fx{display:block;background:linear-gradient(180deg,rgba(18,199,203,.04),transparent 55%)}
 body[data-ftma-theme="summer"] .ftma-season-fx .sun-glow{width:34vw;height:34vw;right:-8vw;top:-10vw;border-radius:50%;background:radial-gradient(circle,rgba(255,221,135,.24),rgba(255,204,91,.08) 35%,transparent 70%);filter:blur(2px);animation:sunPulse 7s ease-in-out infinite alternate}
 body[data-ftma-theme="summer"] .ftma-season-fx .bubble{border:1px solid rgba(180,255,252,.38);border-radius:50%;background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.35),rgba(54,220,220,.05) 45%,transparent 70%);box-shadow:inset -2px -3px 8px rgba(24,173,195,.10),0 0 12px rgba(72,236,228,.10);animation:bubbleRise linear infinite}
 body[data-ftma-theme="summer"] .ftma-season-fx .wave{left:-5%;width:110%;height:90px;bottom:-25px;border-radius:50% 50% 0 0;background:radial-gradient(ellipse at 20% 50%,rgba(56,229,221,.28),transparent 30%),linear-gradient(180deg,rgba(31,195,199,.18),rgba(4,83,108,.38));filter:blur(.2px);animation:waveMove 9s ease-in-out infinite alternate}
 body[data-ftma-theme="summer"] .ftma-season-fx .wave.wave2{bottom:18px;opacity:.38;height:58px;animation-duration:12s;animation-direction:alternate-reverse}
 body[data-ftma-theme="summer"] .ftma-season-fx .spark{width:3px;height:3px;border-radius:50%;background:#fff3c8;box-shadow:0 0 10px rgba(255,223,140,.8);animation:sparkFloat 4s ease-in-out infinite}
-@keyframes sunPulse{from{transform:scale(.96);opacity:.65}to{transform:scale(1.06);opacity:1}}
-@keyframes bubbleRise{0%{transform:translate3d(0,25vh,0) scale(.65);opacity:0}15%{opacity:.55}80%{opacity:.3}100%{transform:translate3d(35px,-115vh,0) scale(1.12);opacity:0}}
-@keyframes waveMove{from{transform:translateX(-2%) rotate(-1deg)}to{transform:translateX(2%) rotate(1deg)}}
-@keyframes sparkFloat{0%,100%{transform:translateY(8px);opacity:.15}50%{transform:translateY(-18px);opacity:.75}}
+@keyframes sunPulse{from{transform:scale(.96);opacity:.65}to{transform:scale(1.06);opacity:1}}@keyframes bubbleRise{0%{transform:translate3d(0,25vh,0) scale(.65);opacity:0}15%{opacity:.55}80%{opacity:.3}100%{transform:translate3d(35px,-115vh,0) scale(1.12);opacity:0}}@keyframes waveMove{from{transform:translateX(-2%) rotate(-1deg)}to{transform:translateX(2%) rotate(1deg)}}@keyframes sparkFloat{0%,100%{transform:translateY(8px);opacity:.15}50%{transform:translateY(-18px);opacity:.75}}
 
-/* WINTER: visible falling snow, icy haze and Christmas lights */
 body[data-ftma-theme="winter"] .ftma-season-fx{display:block;background:linear-gradient(180deg,rgba(211,237,255,.05),transparent 45%)}
 body[data-ftma-theme="winter"] .ftma-season-fx .snowflake{color:#fff;font-size:var(--size,12px);text-shadow:0 0 8px rgba(210,239,255,.85);animation:snowFloat var(--duration,10s) linear infinite;opacity:var(--opacity,.7)}
 body[data-ftma-theme="winter"] .ftma-season-fx .ice-haze{width:48vw;height:30vw;left:26vw;top:-10vw;border-radius:50%;background:radial-gradient(ellipse,rgba(235,248,255,.18),transparent 68%);filter:blur(8px);animation:iceGlow 6s ease-in-out infinite alternate}
 body[data-ftma-theme="winter"] .ftma-season-fx .christmas-lights{left:0;right:0;top:0;height:42px;background:repeating-linear-gradient(90deg,transparent 0 34px,rgba(255,255,255,.06) 35px 36px);border-bottom:1px solid rgba(226,242,255,.12)}
-body[data-ftma-theme="winter"] .ftma-season-fx .bulb{width:7px;height:11px;border-radius:50%;top:25px;box-shadow:0 0 11px currentColor;animation:bulbGlow 1.8s ease-in-out infinite alternate}
-body[data-ftma-theme="winter"] .ftma-season-fx .bulb.red{color:#e85d67;background:#e85d67}.ftma-season-fx .bulb.blue{color:#8ed8ff;background:#8ed8ff}.ftma-season-fx .bulb.gold{color:#ffe08d;background:#ffe08d}
-@keyframes snowFloat{0%{transform:translate3d(0,-12vh,0) rotate(0deg);opacity:0}12%{opacity:var(--opacity,.7)}55%{transform:translate3d(45px,55vh,0) rotate(150deg)}100%{transform:translate3d(-30px,118vh,0) rotate(320deg);opacity:0}}
-@keyframes iceGlow{from{transform:scale(.96);opacity:.45}to{transform:scale(1.08);opacity:.9}}
-@keyframes bulbGlow{from{filter:brightness(.75)}to{filter:brightness(1.45)}}
+body[data-ftma-theme="winter"] .ftma-season-fx .bulb{width:7px;height:11px;border-radius:50%;top:25px;box-shadow:0 0 11px currentColor;animation:bulbGlow 1.8s ease-in-out infinite alternate}.ftma-season-fx .bulb.red{color:#e85d67;background:#e85d67}.ftma-season-fx .bulb.blue{color:#8ed8ff;background:#8ed8ff}.ftma-season-fx .bulb.gold{color:#ffe08d;background:#ffe08d}
+@keyframes snowFloat{0%{transform:translate3d(0,-12vh,0) rotate(0deg);opacity:0}12%{opacity:var(--opacity,.7)}55%{transform:translate3d(45px,55vh,0) rotate(150deg)}100%{transform:translate3d(-30px,118vh,0) rotate(320deg);opacity:0}}@keyframes iceGlow{from{transform:scale(.96);opacity:.45}to{transform:scale(1.08);opacity:.9}}@keyframes bulbGlow{from{filter:brightness(.75)}to{filter:brightness(1.45)}}
 
-/* Make the seasonal environment visible behind every page, including login */
-body[data-ftma-theme="summer"] .app-shell,body[data-ftma-theme="winter"] .app-shell{position:relative;z-index:1}
-body[data-ftma-theme="summer"] .club-login-page,body[data-ftma-theme="winter"] .club-login-page{position:relative;z-index:2}
-body[data-ftma-theme="summer"] .club-login-card{border-color:#207b83;background:linear-gradient(145deg,rgba(7,34,42,.94),rgba(8,23,29,.97));box-shadow:0 24px 70px rgba(15,201,197,.20),inset 0 1px 0 rgba(255,226,157,.16);backdrop-filter:blur(10px)}
-body[data-ftma-theme="winter"] .club-login-card{border-color:#4a6d83;background:linear-gradient(145deg,rgba(10,27,42,.96),rgba(7,17,27,.98));box-shadow:0 24px 70px rgba(101,168,211,.20),inset 0 1px 0 rgba(255,255,255,.13);backdrop-filter:blur(10px)}
-body[data-ftma-theme="summer"] .club-login-card select,body[data-ftma-theme="summer"] .club-login-card input{border-color:#286b75;background:rgba(4,25,31,.9);box-shadow:inset 0 0 20px rgba(27,196,194,.05)}
-body[data-ftma-theme="winter"] .club-login-card select,body[data-ftma-theme="winter"] .club-login-card input{border-color:#405d70;background:rgba(5,15,25,.92);box-shadow:inset 0 0 20px rgba(149,207,239,.05)}
-body[data-ftma-theme="summer"] .club-login-card button{background:linear-gradient(135deg,#0aa9aa,#36ddd5 58%,#f2ca73);border-color:#55e7df;color:#061416;box-shadow:0 8px 24px rgba(25,215,207,.22)}
-body[data-ftma-theme="winter"] .club-login-card button{background:linear-gradient(135deg,#5e91b1,#cceaff 58%,#d9565f);border-color:#c5e7fa;color:#07111a;box-shadow:0 8px 24px rgba(91,154,195,.22)}
-body[data-ftma-theme="summer"] .club-login-card button:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(35,222,214,.30)}
-body[data-ftma-theme="winter"] .club-login-card button:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(117,191,235,.30)}
+/* Public + club login */
+body[data-ftma-theme="summer"] .app-shell,body[data-ftma-theme="winter"] .app-shell{position:relative;z-index:1}body[data-ftma-theme="summer"] .club-login-page,body[data-ftma-theme="winter"] .club-login-page{position:relative;z-index:2}
+body[data-ftma-theme="summer"] .club-login-card{border-color:#207b83;background:linear-gradient(145deg,rgba(7,34,42,.94),rgba(8,23,29,.97));box-shadow:0 24px 70px rgba(15,201,197,.20),inset 0 1px 0 rgba(255,226,157,.16);backdrop-filter:blur(10px)}body[data-ftma-theme="winter"] .club-login-card{border-color:#4a6d83;background:linear-gradient(145deg,rgba(10,27,42,.96),rgba(7,17,27,.98));box-shadow:0 24px 70px rgba(101,168,211,.20),inset 0 1px 0 rgba(255,255,255,.13);backdrop-filter:blur(10px)}
+body[data-ftma-theme="summer"] .club-login-card select,body[data-ftma-theme="summer"] .club-login-card input{border-color:#286b75;background:rgba(4,25,31,.9);box-shadow:inset 0 0 20px rgba(27,196,194,.05)}body[data-ftma-theme="winter"] .club-login-card select,body[data-ftma-theme="winter"] .club-login-card input{border-color:#405d70;background:rgba(5,15,25,.92);box-shadow:inset 0 0 20px rgba(149,207,239,.05)}
+body[data-ftma-theme="summer"] .club-login-card button{background:linear-gradient(135deg,#0aa9aa,#36ddd5 58%,#f2ca73);border-color:#55e7df;color:#061416;box-shadow:0 8px 24px rgba(25,215,207,.22)}body[data-ftma-theme="winter"] .club-login-card button{background:linear-gradient(135deg,#5e91b1,#cceaff 58%,#d9565f);border-color:#c5e7fa;color:#07111a;box-shadow:0 8px 24px rgba(91,154,195,.22)}
+body[data-ftma-theme="summer"] .club-login-card button:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(35,222,214,.30)}body[data-ftma-theme="winter"] .club-login-card button:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(117,191,235,.30)}
 
-/* Seasonalize common admin/portal controls too */
-body[data-ftma-theme="summer"] .ftma-theme-panel,body[data-ftma-theme="summer"] .admin-card{border-color:#245f69}
-body[data-ftma-theme="winter"] .ftma-theme-panel,body[data-ftma-theme="winter"] .admin-card{border-color:#354e60}
-body[data-ftma-theme="summer"] .ftma-theme-buttons button:hover{border-color:#37ddd5;color:#8ff7f1;background:rgba(34,211,207,.08)}
-body[data-ftma-theme="winter"] .ftma-theme-buttons button:hover{border-color:#a9d9f5;color:#fff;background:rgba(149,204,235,.08)}
+/* Admin login lock screen */
+body[data-ftma-theme="summer"] .admin-lock{background:radial-gradient(circle at 50% 0%,rgba(33,214,208,.18),transparent 35%),linear-gradient(180deg,#06232c,#07171d)}body[data-ftma-theme="winter"] .admin-lock{background:radial-gradient(circle at 50% 0%,rgba(214,239,255,.20),transparent 35%),linear-gradient(180deg,#0b1d2d,#060f18)}
+body[data-ftma-theme="summer"] .admin-lock-card{border-color:#277f87;background:linear-gradient(145deg,rgba(8,37,45,.95),rgba(8,23,29,.98));box-shadow:0 28px 80px rgba(20,203,198,.22),inset 0 1px 0 rgba(255,224,151,.15);backdrop-filter:blur(12px)}body[data-ftma-theme="winter"] .admin-lock-card{border-color:#496b80;background:linear-gradient(145deg,rgba(11,30,46,.96),rgba(7,17,27,.99));box-shadow:0 28px 80px rgba(92,159,205,.22),inset 0 1px 0 rgba(255,255,255,.14);backdrop-filter:blur(12px)}
+body[data-ftma-theme="summer"] .admin-lock-seal{border-color:#43e4dd;color:#ffe19a;box-shadow:0 0 26px rgba(43,222,214,.20)}body[data-ftma-theme="winter"] .admin-lock-seal{border-color:#b8e0f8;color:#fff0c4;box-shadow:0 0 26px rgba(151,209,242,.20)}
+body[data-ftma-theme="summer"] .admin-lock-card input{border-color:#2d7079!important;background:#06191f!important}body[data-ftma-theme="winter"] .admin-lock-card input{border-color:#405e72!important;background:#07131f!important}
+body[data-ftma-theme="summer"] .admin-lock-card .primary-btn{background:linear-gradient(135deg,#0aa9aa,#35dcd4 58%,#f0c66d);border-color:#4be4dc;color:#061416;box-shadow:0 8px 24px rgba(29,213,206,.22)}body[data-ftma-theme="winter"] .admin-lock-card .primary-btn{background:linear-gradient(135deg,#6398b7,#d7efff 58%,#d6505b);border-color:#c6e8fa;color:#08131c;box-shadow:0 8px 24px rgba(97,163,208,.22)}
 
-@media(prefers-reduced-motion:reduce){.ftma-season-fx *{animation:none!important}.club-login-card button{transition:none!important}}
+body[data-ftma-theme="summer"] .ftma-theme-panel,body[data-ftma-theme="summer"] .admin-card{border-color:#245f69}body[data-ftma-theme="winter"] .ftma-theme-panel,body[data-ftma-theme="winter"] .admin-card{border-color:#354e60}body[data-ftma-theme="summer"] .ftma-theme-buttons button:hover{border-color:#37ddd5;color:#8ff7f1;background:rgba(34,211,207,.08)}body[data-ftma-theme="winter"] .ftma-theme-buttons button:hover{border-color:#a9d9f5;color:#fff;background:rgba(149,204,235,.08)}
+@media(prefers-reduced-motion:reduce){.ftma-season-fx *{animation:none!important}.club-login-card button,.admin-lock-card .primary-btn{transition:none!important}}
