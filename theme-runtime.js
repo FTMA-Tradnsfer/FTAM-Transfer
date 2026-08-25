@@ -5,8 +5,8 @@
   const allowed=new Set(['default','summer','winter']);
   const labels={default:'FTMA DEFAULT',summer:'☀️ SUMMER TRANSFER WINDOW',winter:'❄️ WINTER TRANSFER WINDOW'};
   function ensureEffects(){
-    if(!document.getElementById('ftma-season-effects-css')){const link=document.createElement('link');link.id='ftma-season-effects-css';link.rel='stylesheet';link.href='season-effects.css?v=20260826scene6';document.head.appendChild(link)}
-    if(!document.getElementById('ftma-season-readable-css')){const link=document.createElement('link');link.id='ftma-season-readable-css';link.rel='stylesheet';link.href='theme-readable.css?v=20260826read1';document.head.appendChild(link)}
+    if(!document.getElementById('ftma-season-effects-css')){const link=document.createElement('link');link.id='ftma-season-effects-css';link.rel='stylesheet';link.href='season-effects.css?v=20260826scene7';document.head.appendChild(link)}
+    if(!document.getElementById('ftma-season-readable-css')){const link=document.createElement('link');link.id='ftma-season-readable-css';link.rel='stylesheet';link.href='theme-readable.css?v=20260826read2';document.head.appendChild(link)}
     let fx=document.getElementById('ftmaSeasonFx');
     if(!fx){fx=document.createElement('div');fx.id='ftmaSeasonFx';fx.className='ftma-season-fx';document.body.appendChild(fx)}
     return fx;
@@ -21,7 +21,7 @@
       for(let i=0;i<20;i++){const s=document.createElement('span');s.className='fx-item sun-spark';s.style.left=(3+Math.random()*94)+'%';s.style.top=(5+Math.random()*75)+'%';s.style.animationDelay=(-Math.random()*5)+'s';fx.appendChild(s)}
     }else if(theme==='winter'){
       const haze=document.createElement('span');haze.className='fx-item snow-haze';fx.appendChild(haze);
-      for(let i=0;i<70;i++){const f=document.createElement('span');f.className='fx-item snowflake';f.textContent=['❄','❅','❆','•'][i%4];f.style.left=Math.random()*100+'%';f.style.top=(-12-Math.random()*35)+'vh';f.style.setProperty('--size',(7+Math.random()*20)+'px');f.style.setProperty('--duration',(7+Math.random()*12)+'s');f.style.setProperty('--opacity',(0.45+Math.random()*0.55).toFixed(2));f.style.animationDelay=(-Math.random()*18)+'s';fx.appendChild(f)}
+      for(let i=0;i<100;i++){const f=document.createElement('span');f.className='fx-item snowflake';f.textContent=['❄','❅','❆','✦','•'][i%5];f.style.left=Math.random()*100+'%';f.style.top=(-12-Math.random()*45)+'vh';f.style.setProperty('--size',(8+Math.random()*22)+'px');f.style.setProperty('--duration',(6+Math.random()*11)+'s');f.style.setProperty('--opacity',(0.55+Math.random()*0.45).toFixed(2));f.style.animationDelay=(-Math.random()*18)+'s';fx.appendChild(f)}
       ['⛄','🎄','🍬'].forEach((t,i)=>{const d=document.createElement('span');d.className='fx-item winter-decor decor-'+i;d.textContent=t;d.style.left=(i*8+3)+'%';d.style.bottom='3vh';fx.appendChild(d)});
     }
   }
