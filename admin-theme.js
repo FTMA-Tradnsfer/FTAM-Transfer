@@ -1,11 +1,13 @@
 (function(){
   'use strict';
   const URL='https://iloanplyuatfcwzovbpb.supabase.co';
-  const KEY='sb_publishable_oPXhOaLIGK05Ehw-o6jDSw_TKJODpjM'.replace('jD6','jD6');
+  const KEY='sb_publishable_oPXhOaLIGK05Ehw-o6jDsw_TKJODpjM';
+  const ADMIN_MUTATE=URL+'/rest/v1/rpc/ftma_admin_mutate';
   const labels={default:'기본 테마',summer:'☀️ 여름 이적시장',winter:'❄️ 겨울 이적시장'};
   const token=()=>sessionStorage.getItem('ftma_admin_token')||'';
+  const headers=()=>({apikey:KEY,Authorization:`Bearer ${KEY}`,'Content-Type':'application/json'});
   const get=async()=>{const r=await fetch(`${URL}/rest/v1/site_settings?select=value&key=eq.active_theme&limit=1`,{headers:{apikey:KEY,Authorization:`Bearer ${KEY}`},cache:'no-store'});if(!r.ok)throw new Error('테마 정보를 불러오지 못했습니다.');const d=await r.json();return d?.[0]?.value||'default'};
-  const set=async theme=>{const t=token();if(!t)throw new Error('관리자 세션이 없습니다. 다시 로그인해주세요.');const r=await fetch(`${URL}/rest/v1/rpc/ftma_admin_set_site_setting`,{method:'POST',headers:{apikey:KEY,Authorization:`Bearer ${KEY}`,'Content-Type':'application/json'},body:JSON.stringify({p_token:t,p_key:'active_theme',p_value:theme}),cache:'no-store'});const text=await r.text();let d=null;try{d=text?JSON.parse(text):null}catch{}if(!r.ok)throw new Error(d?.message||text||`HTTP ${r.status}`);return d};
+  const set=async theme=>{const t=token();if(!t)throw new Error('관리자 세션이 없습니다. 다시 로그인해주세요.');const r=await fetch(ADMIN_MUTATE,{method:'POST',headers:headers(),body:JSON.stringify({p_token:t,p_table:'site_settings',p_operation:'upsert',p_id:null,p_payload:{key:'active_theme',value:theme}}),cache:'no-store'});const text=await r.text();let d=null;try{d=text?JSON.parse(text):null}catch{}if(!r.ok)throw new Error(d?.message||text||`HTTP ${r.status}`);return d};
   function mount(){
     if(document.getElementById('ftmaThemePanel'))return;
     const grid=document.querySelector('.admin-grid');if(!grid)return;
