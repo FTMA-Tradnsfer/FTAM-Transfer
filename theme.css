@@ -1,89 +1,49 @@
-/* FTMA seasonal themes — complete visual transformations, not black/gold variants. */
+/* FTMA seasonal themes — immersive seasonal worlds. */
 body{--season-accent:var(--gold);--season-accent-2:var(--gold2);--season-glow:rgba(255,255,255,.10)}
 
-/* ☀️ SUMMER — ocean / turquoise / sky / sunlight. No black-gold identity. */
-body[data-ftma-theme="summer"]{
-  --gold:#FFD166;--gold2:#FFE7A0;--gold3:#FFF6D6;
-  --line:#2A9DA8;--line2:#62D4D9;--season-accent:#28C7D3;--season-accent-2:#FFF1B5;
-  --season-glow:rgba(40,199,211,.25);--bg:#06252D;
-  color:#F4FFFF;
-  background:
-    radial-gradient(circle at 78% 4%,rgba(255,225,132,.40),transparent 20%),
-    radial-gradient(circle at 15% 12%,rgba(84,220,236,.28),transparent 28%),
-    linear-gradient(180deg,#0A6676 0%,#087F91 27%,#075C70 56%,#063D4E 100%);
-}
-body[data-ftma-theme="summer"]::before{
-  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
-  background:
-    radial-gradient(ellipse at 82% -2%,rgba(255,249,206,.50),transparent 23%),
-    linear-gradient(160deg,transparent 0 55%,rgba(120,239,244,.10) 56%,transparent 68%),
-    linear-gradient(20deg,transparent 0 62%,rgba(255,255,255,.055) 63%,transparent 72%);
-  animation:summerShine 10s ease-in-out infinite alternate;
-}
-body[data-ftma-theme="summer"]::after{
-  content:"";position:fixed;left:-5%;right:-5%;bottom:-3vh;height:25vh;pointer-events:none;z-index:0;
-  background:repeating-radial-gradient(ellipse at 50% 100%,rgba(151,244,246,.15) 0 2px,transparent 3px 24px);
-  opacity:.55;transform:perspective(500px) rotateX(58deg);animation:seaMove 9s ease-in-out infinite alternate;
-}
-@keyframes summerShine{from{opacity:.65;transform:translate3d(-1%,0,0)}to{opacity:1;transform:translate3d(1%,1%,0)}}
-@keyframes seaMove{from{transform:perspective(500px) rotateX(58deg) translateX(-2%)}to{transform:perspective(500px) rotateX(58deg) translateX(2%)}}
+/* ☀️ SUMMER — tropical beach / sunset / coral / turquoise. Intentionally no winter-like blue palette. */
+body[data-ftma-theme="summer"]{--gold:#FFD35A;--gold2:#FFE99A;--gold3:#FFF7D0;--line:#E86F51;--line2:#FF9A68;--season-accent:#FF7A59;--season-accent-2:#FFF0A8;--season-glow:rgba(255,122,89,.28);--bg:#0E4A4A;color:#FFFDF4;background:linear-gradient(180deg,#F06B52 0%,#F58A52 20%,#F6B45D 43%,#2AAE9A 72%,#0C6F68 100%)}
+body[data-ftma-theme="summer"]::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(circle at 82% 7%,rgba(255,251,194,.95) 0 4%,rgba(255,220,99,.55) 8%,transparent 23%),linear-gradient(180deg,rgba(255,120,78,.15),transparent 45%);animation:summerSun 8s ease-in-out infinite alternate}
+body[data-ftma-theme="summer"]::after{content:"";position:fixed;left:-5%;right:-5%;bottom:-2vh;height:32vh;pointer-events:none;z-index:0;background:repeating-radial-gradient(ellipse at 50% 100%,rgba(255,255,255,.18) 0 2px,transparent 3px 22px),linear-gradient(180deg,transparent 0 18%,rgba(250,220,145,.22) 19%,rgba(20,145,130,.50) 100%);opacity:.78;transform:perspective(700px) rotateX(56deg);animation:summerSea 8s ease-in-out infinite alternate}
+@keyframes summerSun{from{opacity:.72;transform:scale(.98)}to{opacity:1;transform:scale(1.04)}}@keyframes summerSea{from{background-position:0 0,0 0;transform:perspective(700px) rotateX(56deg) translateX(-1%)}to{background-position:45px 0,0 0;transform:perspective(700px) rotateX(56deg) translateX(1%)}}
 
-/* ☀️ Summer UI */
-body[data-ftma-theme="summer"] .site-header{background:linear-gradient(180deg,rgba(5,45,54,.97),rgba(5,91,106,.96));border-bottom-color:#27C5D0;box-shadow:0 10px 42px rgba(0,229,240,.18),inset 0 -1px 0 rgba(255,229,139,.28)}
-body[data-ftma-theme="summer"] .main-nav{background:rgba(4,65,77,.90);border-bottom-color:#29B9C5}
-body[data-ftma-theme="summer"] .main-nav a.active{color:#FFF1A9;border-bottom-color:#FFD45A;background:linear-gradient(180deg,rgba(255,214,91,.18),rgba(40,199,211,.10))}
-body[data-ftma-theme="summer"] .brand-seal,body[data-ftma-theme="summer"] .club-mark,body[data-ftma-theme="summer"] .club-title-logo{box-shadow:0 0 32px rgba(38,207,219,.25)}
-body[data-ftma-theme="summer"] .directory-hero{background:linear-gradient(135deg,rgba(8,111,128,.95),rgba(4,55,68,.98)),radial-gradient(circle at 80% 10%,rgba(255,224,120,.32),transparent 28%);border-bottom-color:#39CBD4}
-body[data-ftma-theme="summer"] .directory-club:hover,body[data-ftma-theme="summer"] .detail-card:hover{border-color:#35D8E1;box-shadow:0 12px 34px rgba(27,220,231,.20)}
-body[data-ftma-theme="summer"] .gold-btn,body[data-ftma-theme="summer"] .club-add-btn{background:linear-gradient(135deg,#08AEBE,#25D4D5 58%,#FFD166);border-color:#8AF4F0;color:#05272E;box-shadow:0 8px 26px rgba(22,215,222,.30)}
-body[data-ftma-theme="summer"] .portal-title{background:linear-gradient(90deg,#075263,rgba(55,220,228,.18),#075263);color:#F8FFFF}
-body[data-ftma-theme="summer"] .featured-news,body[data-ftma-theme="summer"] .portal-card,body[data-ftma-theme="summer"] .club-card,body[data-ftma-theme="summer"] .profile-card{background:linear-gradient(145deg,rgba(7,72,85,.94),rgba(5,45,56,.97));box-shadow:inset 0 1px 0 rgba(122,240,244,.18),0 12px 34px rgba(0,35,45,.28);border-color:rgba(78,213,221,.35)}
-body[data-ftma-theme="summer"] .news-tag,body[data-ftma-theme="summer"] .transfer-tag{color:#FFF0A8;border-color:rgba(79,226,232,.55);background:rgba(22,197,209,.16)}
-body[data-ftma-theme="summer"] .ftma-theme-panel{border-color:#27C5D0;background:linear-gradient(145deg,#07596A,#062D37);box-shadow:0 18px 45px rgba(0,194,209,.15)}
-body[data-ftma-theme="summer"] .ftma-theme-buttons button:hover{border-color:#75F2F2;color:#FFF0AA;background:rgba(22,211,219,.20)}
+body[data-ftma-theme="summer"] .site-header{background:linear-gradient(180deg,rgba(132,48,48,.97),rgba(232,103,76,.95));border-bottom-color:#FFD35A;box-shadow:0 10px 42px rgba(255,105,72,.28),inset 0 -1px 0 rgba(255,242,170,.45)}
+body[data-ftma-theme="summer"] .main-nav{background:linear-gradient(90deg,#D95D50,#F08055,#D95D50);border-bottom-color:#FFD35A}
+body[data-ftma-theme="summer"] .main-nav a.active{color:#FFF4B0;border-bottom-color:#FFF0A0;background:rgba(255,219,93,.22)}
+body[data-ftma-theme="summer"] .brand-seal,body[data-ftma-theme="summer"] .club-mark,body[data-ftma-theme="summer"] .club-title-logo{box-shadow:0 0 34px rgba(255,221,91,.34)}
+body[data-ftma-theme="summer"] .directory-hero{background:linear-gradient(135deg,rgba(198,74,67,.96),rgba(16,119,105,.97)),radial-gradient(circle at 80% 8%,rgba(255,236,139,.45),transparent 28%);border-bottom-color:#FFD35A}
+body[data-ftma-theme="summer"] .directory-club:hover,body[data-ftma-theme="summer"] .detail-card:hover{border-color:#FFD35A;box-shadow:0 12px 34px rgba(255,119,79,.28)}
+body[data-ftma-theme="summer"] .gold-btn,body[data-ftma-theme="summer"] .club-add-btn{background:linear-gradient(135deg,#F06455,#FF8A58 52%,#FFD45A);border-color:#FFE9A1;color:#421E1A;box-shadow:0 8px 26px rgba(255,107,79,.32)}
+body[data-ftma-theme="summer"] .portal-title{background:linear-gradient(90deg,#B94D4A,#EF8A57,#B94D4A);color:#FFF8DB}
+body[data-ftma-theme="summer"] .featured-news,body[data-ftma-theme="summer"] .portal-card,body[data-ftma-theme="summer"] .club-card,body[data-ftma-theme="summer"] .profile-card{background:linear-gradient(145deg,rgba(160,67,62,.96),rgba(13,101,92,.96));box-shadow:inset 0 1px 0 rgba(255,237,160,.24),0 12px 34px rgba(88,37,35,.30);border-color:rgba(255,207,101,.42)}
+body[data-ftma-theme="summer"] .news-tag,body[data-ftma-theme="summer"] .transfer-tag{color:#FFF0A4;border-color:rgba(255,223,105,.62);background:rgba(245,94,72,.22)}
+body[data-ftma-theme="summer"] .ftma-theme-panel{border-color:#FF8765;background:linear-gradient(145deg,#A84D48,#0C7B6F);box-shadow:0 18px 45px rgba(255,103,78,.22)}
+body[data-ftma-theme="summer"] .ftma-theme-buttons button:hover{border-color:#FFE08A;color:#FFF2AD;background:linear-gradient(90deg,rgba(242,89,71,.30),rgba(24,160,142,.24))}
 
-/* ❄️ WINTER — ice blue / white / lavender. No gold, green or red. */
-body[data-ftma-theme="winter"]{
-  --gold:#BFE7FF;--gold2:#E7F7FF;--gold3:#FFFFFF;
-  --line:#5C9BC2;--line2:#9ED7F5;--season-accent:#BCEBFF;--season-accent-2:#FFFFFF;
-  --season-glow:rgba(143,218,255,.30);--bg:#071522;
-  color:#F3FAFF;
-  background:
-    radial-gradient(circle at 50% -8%,rgba(231,249,255,.48),transparent 24%),
-    radial-gradient(circle at 8% 25%,rgba(83,157,213,.24),transparent 28%),
-    radial-gradient(circle at 92% 30%,rgba(154,129,224,.18),transparent 27%),
-    linear-gradient(180deg,#102B43 0%,#0A1F33 48%,#071522 100%);
-}
-body[data-ftma-theme="winter"]::before{
-  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
-  background:radial-gradient(circle at 50% 0%,rgba(255,255,255,.24),transparent 28%),linear-gradient(110deg,transparent 0 65%,rgba(181,227,255,.07) 66%,transparent 73%);
-  animation:winterLight 8s ease-in-out infinite alternate;
-}
-body[data-ftma-theme="winter"]::after{
-  content:"";position:fixed;left:-5%;right:-5%;bottom:-1vh;height:18vh;pointer-events:none;z-index:0;
-  background:linear-gradient(180deg,transparent,#DDF5FF 65%,#F8FDFF 100%);opacity:.16;filter:blur(3px);
-}
-@keyframes winterLight{from{opacity:.55}to{opacity:1}}
+/* ❄️ WINTER — snowfield / white snow / frosted navy. */
+body[data-ftma-theme="winter"]{--gold:#DDF4FF;--gold2:#FFFFFF;--gold3:#FFFFFF;--line:#A9C8D9;--line2:#E8F7FF;--season-accent:#FFFFFF;--season-accent-2:#FFFFFF;--season-glow:rgba(255,255,255,.45);--bg:#C9DCE6;color:#172B38;background:linear-gradient(180deg,#DCEAF0 0%,#C7DCE5 42%,#A9C5D0 100%)}
+body[data-ftma-theme="winter"]::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:linear-gradient(180deg,rgba(255,255,255,.76) 0%,rgba(255,255,255,.18) 42%,rgba(116,156,175,.20) 100%),radial-gradient(circle at 18% 12%,#FFFFFF 0 5%,transparent 22%),radial-gradient(circle at 83% 18%,rgba(255,255,255,.95),transparent 25%)}
+body[data-ftma-theme="winter"]::after{content:"";position:fixed;left:-4%;right:-4%;bottom:-5vh;height:32vh;pointer-events:none;z-index:0;background:linear-gradient(180deg,rgba(255,255,255,.12),#FFFFFF 58%,#F4FBFF 100%);clip-path:polygon(0 42%,7% 34%,14% 45%,22% 30%,31% 42%,39% 26%,48% 40%,57% 28%,66% 43%,74% 31%,83% 45%,91% 29%,100% 40%,100% 100%,0 100%);box-shadow:0 -14px 45px rgba(255,255,255,.65)}
+body[data-ftma-theme="winter"] .site-header{background:linear-gradient(180deg,rgba(245,251,254,.98),rgba(214,232,240,.98));border-bottom-color:#FFFFFF;box-shadow:0 10px 35px rgba(87,125,143,.20);color:#17303E}
+body[data-ftma-theme="winter"] .main-nav{background:linear-gradient(90deg,#E8F3F7,#C7DCE5,#E8F3F7);border-bottom-color:#FFFFFF;color:#17303E}
+body[data-ftma-theme="winter"] .main-nav a.active{color:#0B617C;border-bottom-color:#0B617C;background:rgba(255,255,255,.55)}
+body[data-ftma-theme="winter"] .brand-seal,body[data-ftma-theme="winter"] .club-mark,body[data-ftma-theme="winter"] .club-title-logo{box-shadow:0 0 32px rgba(255,255,255,.75)}
+body[data-ftma-theme="winter"] .directory-hero{background:linear-gradient(135deg,rgba(236,247,251,.96),rgba(173,202,214,.98));border-bottom-color:#FFFFFF;color:#17303E}
+body[data-ftma-theme="winter"] .directory-club:hover,body[data-ftma-theme="winter"] .detail-card:hover{border-color:#FFFFFF;box-shadow:0 12px 34px rgba(73,120,142,.22)}
+body[data-ftma-theme="winter"] .gold-btn,body[data-ftma-theme="winter"] .club-add-btn{background:linear-gradient(135deg,#FFFFFF,#E7F5FA 55%,#B5D5E1);border-color:#FFFFFF;color:#17303E;box-shadow:0 8px 26px rgba(86,132,150,.25)}
+body[data-ftma-theme="winter"] .portal-title{background:linear-gradient(90deg,#C5DCE5,#F9FDFF,#C5DCE5);color:#17303E}
+body[data-ftma-theme="winter"] .featured-news,body[data-ftma-theme="winter"] .portal-card,body[data-ftma-theme="winter"] .club-card,body[data-ftma-theme="winter"] .profile-card{background:rgba(241,249,252,.90);box-shadow:inset 0 1px 0 #FFFFFF,0 12px 34px rgba(76,111,127,.20);border-color:#FFFFFF;color:#17303E}
+body[data-ftma-theme="winter"] .news-tag,body[data-ftma-theme="winter"] .transfer-tag{color:#0A5F7A;border-color:#9EC3D2;background:rgba(255,255,255,.72)}
+body[data-ftma-theme="winter"] .ftma-theme-panel{border-color:#FFFFFF;background:linear-gradient(145deg,#D8EAF1,#F9FDFF);box-shadow:0 18px 45px rgba(75,115,133,.18)}
+body[data-ftma-theme="winter"] .ftma-theme-buttons button:hover{border-color:#FFFFFF;color:#0B617C;background:#F8FDFF}
 
-/* ❄️ Winter UI */
-body[data-ftma-theme="winter"] .site-header{background:linear-gradient(180deg,rgba(11,34,53,.98),rgba(7,21,34,.98));border-bottom-color:#6FB8DF;box-shadow:0 10px 42px rgba(75,173,225,.20),inset 0 -1px 0 rgba(223,248,255,.24)}
-body[data-ftma-theme="winter"] .main-nav{background:rgba(9,32,50,.94);border-bottom-color:#4F8FB6}
-body[data-ftma-theme="winter"] .main-nav a.active{color:#E9FAFF;border-bottom-color:#AEE7FF;background:linear-gradient(180deg,rgba(163,225,255,.18),rgba(116,151,219,.08))}
-body[data-ftma-theme="winter"] .brand-seal,body[data-ftma-theme="winter"] .club-mark,body[data-ftma-theme="winter"] .club-title-logo{box-shadow:0 0 32px rgba(130,214,255,.22)}
-body[data-ftma-theme="winter"] .directory-hero{background:linear-gradient(135deg,rgba(17,57,84,.96),rgba(7,24,39,.99)),radial-gradient(circle at 80% 12%,rgba(225,247,255,.28),transparent 28%);border-bottom-color:#72B9DD}
-body[data-ftma-theme="winter"] .directory-club:hover,body[data-ftma-theme="winter"] .detail-card:hover{border-color:#A8E5FF;box-shadow:0 12px 34px rgba(92,188,239,.20)}
-body[data-ftma-theme="winter"] .gold-btn,body[data-ftma-theme="winter"] .club-add-btn{background:linear-gradient(135deg,#5BA8D4,#BCEBFF 55%,#E8F7FF);border-color:#E8FAFF;color:#092234;box-shadow:0 8px 26px rgba(111,198,241,.24)}
-body[data-ftma-theme="winter"] .portal-title{background:linear-gradient(90deg,#0B263B,rgba(151,216,255,.16),#0B263B);color:#F4FBFF}
-body[data-ftma-theme="winter"] .featured-news,body[data-ftma-theme="winter"] .portal-card,body[data-ftma-theme="winter"] .club-card,body[data-ftma-theme="winter"] .profile-card{background:linear-gradient(145deg,rgba(17,54,78,.95),rgba(7,28,45,.98));box-shadow:inset 0 1px 0 rgba(210,242,255,.18),0 12px 34px rgba(0,18,34,.30);border-color:rgba(130,198,230,.38)}
-body[data-ftma-theme="winter"] .news-tag,body[data-ftma-theme="winter"] .transfer-tag{color:#E7FAFF;border-color:rgba(158,219,248,.55);background:rgba(113,183,221,.13)}
-body[data-ftma-theme="winter"] .ftma-theme-panel{border-color:#5D9FC6;background:linear-gradient(145deg,#123B58,#091D30);box-shadow:0 18px 45px rgba(70,164,218,.16)}
-body[data-ftma-theme="winter"] .ftma-theme-buttons button:hover{border-color:#BCEBFF;color:#FFFFFF;background:rgba(121,201,239,.16)}
+/* Seasonal banner */
+.ftma-season-banner{display:flex!important;align-items:center;justify-content:center;min-height:58px;padding:8px 18px;text-align:center;font-weight:900;letter-spacing:2px;font-size:15px;position:relative;z-index:3}
+body[data-ftma-theme="summer"] .ftma-season-banner{color:#FFF8C8;background:linear-gradient(90deg,#C94F48,#F07A52,#F4B34E,#2B9F8D);border-bottom:3px solid #FFE07A;text-shadow:0 2px 8px rgba(73,26,21,.5);box-shadow:0 6px 26px rgba(235,91,68,.30)}
+body[data-ftma-theme="winter"] .ftma-season-banner{color:#17303E;background:linear-gradient(90deg,#FFFFFF,#E5F2F7,#FFFFFF);border-bottom:3px solid #FFFFFF;text-shadow:0 1px 3px rgba(255,255,255,.8);box-shadow:0 6px 26px rgba(255,255,255,.70)}
 
 /* Shared */
 body[data-ftma-theme="summer"] .app-shell,body[data-ftma-theme="winter"] .app-shell{position:relative;z-index:1}
 body[data-ftma-theme="summer"] .club-login-page,body[data-ftma-theme="winter"] .club-login-page{position:relative;z-index:2}
-.ftma-season-banner{display:flex!important;align-items:center;justify-content:center;min-height:52px;padding:8px 18px;text-align:center;font-weight:900;letter-spacing:2px;font-size:14px;position:relative;z-index:3}
-body[data-ftma-theme="summer"] .ftma-season-banner{color:#FFF4B7;background:linear-gradient(90deg,#075467,#0EA8B6 45%,#F5BE43 100%);border-bottom:2px solid #FFE08A;text-shadow:0 1px 8px rgba(0,0,0,.5);box-shadow:0 5px 24px rgba(19,205,215,.25)}
-body[data-ftma-theme="winter"] .ftma-season-banner{color:#F5FCFF;background:linear-gradient(90deg,#0B304C,#216A94 45%,#8298D4 100%);border-bottom:2px solid #DDF7FF;text-shadow:0 1px 8px rgba(0,0,0,.55);box-shadow:0 5px 24px rgba(94,181,232,.24)}
-.ftma-theme-panel{margin-top:18px;padding:22px}.ftma-theme-panel h3{margin:0 0 7px;color:#f4f1e9}.ftma-theme-panel p{margin:0 0 15px;color:#88857e;font-size:10px}.ftma-theme-buttons{display:flex;gap:8px;flex-wrap:wrap}.ftma-theme-buttons button{border:1px solid #3b3d42;background:#0d0f11;color:#c9c5bc;padding:10px 14px;cursor:pointer}.ftma-theme-buttons button.active{border-color:var(--season-accent);color:var(--season-accent-2);box-shadow:0 0 0 1px var(--season-glow)}
+.ftma-theme-panel{margin-top:18px;padding:22px}.ftma-theme-panel h3{margin:0 0 7px}.ftma-theme-panel p{margin:0 0 15px;font-size:10px}.ftma-theme-buttons{display:flex;gap:8px;flex-wrap:wrap}.ftma-theme-buttons button{border:1px solid #3b3d42;background:#0d0f11;color:#c9c5bc;padding:10px 14px;cursor:pointer}.ftma-theme-buttons button.active{border-color:var(--season-accent);color:var(--season-accent-2);box-shadow:0 0 0 1px var(--season-glow)}
 @media(max-width:600px){.ftma-theme-buttons{display:grid;grid-template-columns:1fr}.ftma-theme-buttons button{width:100%}}
