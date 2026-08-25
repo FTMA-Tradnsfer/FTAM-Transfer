@@ -5,9 +5,9 @@
   const allowed=new Set(['default','summer','winter']);
   const labels={default:'FTMA DEFAULT',summer:'☀️ SUMMER TRANSFER WINDOW',winter:'🎄 CHRISTMAS TRANSFER WINDOW'};
   function ensureEffects(){
-    if(!document.getElementById('ftma-season-effects-css')){const link=document.createElement('link');link.id='ftma-season-effects-css';link.rel='stylesheet';link.href='season-effects.css?v=20260826effects2';document.head.appendChild(link)}
+    if(!document.getElementById('ftma-season-effects-css')){const link=document.createElement('link');link.id='ftma-season-effects-css';link.rel='stylesheet';link.href='season-effects.css?v=20260826effects3';document.head.appendChild(link)}
     let fx=document.getElementById('ftmaSeasonFx');
-    if(!fx){fx=document.createElement('div');fx.id='ftmaSeasonFx';className='ftma-season-fx';document.body.appendChild(fx)}
+    if(!fx){fx=document.createElement('div');fx.id='ftmaSeasonFx';fx.className='ftma-season-fx';document.body.appendChild(fx)}
     return fx;
   }
   function buildEffects(theme){
