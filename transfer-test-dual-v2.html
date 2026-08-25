@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FTMA Transfer Dual Lab v2</title>
+<style>
+:root{--bg:#080b10;--card:#11161d;--line:#2c333d;--gold:#e4c36a;--green:#77d3a0;--red:#ef8d8d;--blue:#8db7ff;--muted:#929aa6}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% -10%,#1b2735,#080b10 55%);color:#f5f7fa;font-family:Arial,sans-serif}.wrap{max-width:1400px;margin:auto;padding:28px}.top{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:18px}.badge{border:1px solid var(--gold);color:var(--gold);padding:7px 12px;border-radius:20px;font-size:12px}.muted{color:var(--muted);font-size:13px}.toolbar,.actions{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}.btn{background:#171d25;border:1px solid #3a424d;color:#fff;border-radius:7px;padding:10px 14px;cursor:pointer}.btn:hover{border-color:var(--gold)}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.card{background:rgba(17,22,29,.96);border:1px solid var(--line);border-radius:13px;padding:20px}.buyer{border-top:3px solid #5d91ff}.seller{border-top:3px solid #d65b5b}.role{font-size:12px;letter-spacing:.08em;color:var(--muted)}h2{margin:6px 0 4px}.player{font-size:22px;font-weight:800}.row{display:flex;justify-content:space-between;border-top:1px solid #272e37;padding:11px 0}.money{font-size:24px;color:var(--gold);font-weight:800;margin:12px 0}.controls{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.field label{display:block;color:#b5bcc6;font-size:12px;margin-bottom:5px}.field input,.field select,.field textarea{width:100%;background:#0b0f15;color:#fff;border:1px solid #343c47;border-radius:7px;padding:10px}.field textarea{min-height:72px;resize:vertical}.wide{grid-column:1/-1}.state{margin-top:14px;padding:12px;border-radius:8px;background:#0b1016;border:1px solid #29313b}.green{color:var(--green)}.red{color:var(--red)}.blue{color:var(--blue)}.contract{margin-top:15px;padding-top:14px;border-top:1px solid #29313b}.clause{display:flex;gap:8px;align-items:center;margin-top:8px}.clause input{flex:1}.clause .amount{max-width:130px}.log{margin-top:18px;max-height:360px;overflow:auto}.item{padding:11px 4px;border-bottom:1px solid #252c35}.note{margin-top:15px;padding:13px;border:1px dashed #4a535f;color:#b8bec8;border-radius:8px;font-size:13px}.incoming{border:1px solid #4b5f78;background:#0c141d;padding:14px;border-radius:9px;margin-top:14px}.incoming h3{margin:0 0 8px}.hidden{display:none}@media(max-width:850px){.grid,.controls{grid-template-columns:1fr}.wrap{padding:16px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="top"><div><h1>FTMA TRANSFER DUAL LAB</h1><div class="muted">같은 협상 건을 구매 구단과 판매 구단 양쪽 화면으로 테스트</div></div><span class="badge">TEST MODE · NO DB WRITE</span></div>
+<div class="toolbar"><button class="btn" onclick="resetLab()">↻ 전체 초기화</button><button class="btn" onclick="newDeal()">＋ 새 협상</button><button class="btn" onclick="presetPermanent()">⚽ 완전이적 테스트</button><button class="btn" onclick="presetLoan()">📦 임대 테스트</button><button class="btn" onclick="presetLoanBuy()">🔁 임대+완전영입 테스트</button></div>
+<div class="grid">
+<section class="card buyer">
+<div class="role">PURCHASING CLUB</div><h2>04렙쿠</h2><div class="muted">구매 구단 · 가용 예산 €40M</div>
+<div class="row"><span>선수</span><b>코조-코피 멘사</b></div><div class="row"><span>판매 구단</span><b>산초HD</b></div>
+<div class="controls"><div class="field"><label>거래 형태</label><select id="bType" onchange="toggleLoan()"><option value="permanent">완전 이적</option><option value="loan">임대</option><option value="loan_buy">임대 후 완전이적</option></select></div><div class="field"><label>제안 기본 금액 (€M)</label><input id="bPrice" type="number" value="18" min="0" step="0.5"></div></div>
+<div id="bLoan" class="contract hidden"><div class="controls"><div class="field"><label>임대 기간</label><select id="bYears"><option>1시즌</option><option>2시즌</option><option>3시즌</option></select></div><div class="field"><label>임대료 (€M)</label><input id="bLoanFee" type="number" value="3" min="0" step="0.5"></div><div class="field wide"><label>출전/성과 조건 직접 입력</label><textarea id="bAppear" placeholder="예: 리그 20경기 이상 출전"></textarea></div></div></div>
+<div class="contract"><b>구매 구단 부가 조항</b><div id="bClauses"></div><button class="btn" onclick="addClause('b')">＋ 조항 추가</button></div>
+<div class="field" style="margin-top:12px"><label>기타 조건</label><textarea id="bOther" placeholder="구단 간 자유 협상 조건"></textarea></div>
+<div class="actions"><button class="btn" onclick="sendOffer()">📨 이적 요청 보내기</button><button class="btn" onclick="withdraw()">↩ 제안 철회</button></div>
+<div id="buyerIncoming" class="incoming hidden"><h3>📩 판매 구단 역제안 도착</h3><div id="buyerIncomingText"></div><div class="actions"><button class="btn" onclick="buyerAccept()">✅ 역제안 수락</button><button class="btn" onclick="buyerCounter()">🔄 다시 역제안</button><button class="btn" onclick="buyerReject()">❌ 역제안 거절</button></div></div>
+<div class="state">현재 상태: <b id="bState" class="blue">제안 전</b><br>내가 보낸 제안: <b id="bOffer">-</b></div>
+</section>
+<section class="card seller">
+<div class="role">SELLING CLUB</div><h2>산초HD</h2><div class="muted">판매 구단 · 이적 요청함</div>
+<div class="row"><span>선수</span><b>코조-코피 멘사</b></div><div class="row"><span>구매 구단</span><b>04렙쿠</b></div>
+<div class="state"><b>📥 이적 요청함</b><br><span id="sRequest">아직 제안이 없습니다.</span></div>
+<div id="sellerIncoming" class="incoming hidden"><h3>📨 구매 구단 제안 검토</h3><div id="sellerIncomingText"></div><div class="actions"><button class="btn" onclick="sellerAccept()">✅ 이 제안 수락</button><button class="btn" onclick="sellerCounter()">🔄 역제안 보내기</button><button class="btn" onclick="sellerReject()">❌ 거절</button></div></div>
+<div class="contract"><b>판매 구단 역제안 설정</b><div class="controls"><div class="field"><label>역제안 금액 (€M)</label><input id="sPrice" type="number" value="24" min="0" step="0.5"></div><div class="field"><label>역제안 거래 형태</label><select id="sType"><option value="permanent">완전 이적</option><option value="loan">임대</option><option value="loan_buy">임대 후 완전이적</option></select></div></div><div class="field" style="margin-top:10px"><label>판매 구단 부가 조항/조건</label><textarea id="sOther" placeholder="예: 리그 20경기 출전 시 €3M 추가 지급"></textarea></div><div id="sClauses"></div><button class="btn" style="margin-top:8px" onclick="addClause('s')">＋ 조항 추가</button></div>
+<div class="state">현재 상태: <b id="sState" class="blue">요청 대기</b></div>
+</section>
+</div>
+<section class="card log"><h2>🤝 동일 협상 건의 실시간 기록</h2><div id="log"></div><div class="note">핵심 변경: 판매 구단이 역제안을 보내면 구매 구단에 별도의 '판매 구단 역제안 도착' 영역이 생기며, 여기서 <b>수락 / 다시 역제안 / 거절</b>을 할 수 있습니다. 반대로 구매 구단의 최초 제안은 판매 구단에서 <b>수락 / 역제안 / 거절</b>할 수 있습니다. 즉 어느 방향의 제안이든 받은 쪽이 직접 결정합니다.</div></section>
+</div>
+<script>
+let deal={state:'제안 전',round:0,offer:null,log:[]};const $=id=>document.getElementById(id);const money=n=>'€'+Number(n).toFixed(Number(n)%1?'1':'0')+'M';
+function add(t){deal.log.push(t);$('log').innerHTML=deal.log.map(x=>'<div class="item">'+x+'</div>').join('');$('log').scrollTop=$('log').scrollHeight}
+function clauses(side){return [...document.querySelectorAll('#'+side+'Clauses .clause')].map(x=>({text:x.querySelector('.txt').value.trim(),amount:x.querySelector('.amount').value})).filter(x=>x.text||x.amount)}
+function addClause(side,text='',amount=''){const d=document.createElement('div');d.className='clause';d.innerHTML='<input class="txt" placeholder="예: 리그 20경기 출전 달성" value="'+text.replaceAll('"','&quot;')+'"><input class="amount" type="number" min="0" step="0.5" placeholder="추가 €M" value="'+amount+'"><button class="btn" type="button">삭제</button>';d.querySelector('button').onclick=()=>d.remove();$(side+'Clauses').appendChild(d)}
+function readBuyer(){const t=$('bType').value;return{type:t,price:Number($('bPrice').value),years:t!=='permanent'?$('bYears').value:null,loanFee:t!=='permanent'?Number($('bLoanFee').value):0,appear:t!=='permanent'?$('bAppear').value.trim():'',clauses:clauses('b'),other:$('bOther').value.trim()}}
+function readSeller(){return{type:$('sType').value,price:Number($('sPrice').value),clauses:clauses('s'),other:$('sOther').value.trim()}}
+function fmt(o){let x=money(o.price)+' · '+o.type;if(o.years)x+=' · '+o.years+' · 임대료 '+money(o.loanFee);if(o.appear)x+=' · '+o.appear;if(o.clauses?.length)x+=' · 부가조항 '+o.clauses.length+'개';if(o.other)x+=' · '+o.other;return x}
+function toggleLoan(){$('bLoan').classList.toggle('hidden',$('bType').value==='permanent')}
+function sendOffer(){if(deal.state==='합의 완료'){add('⚠️ 이미 합의가 완료된 협상입니다.');return}const o=readBuyer();deal.offer=o;deal.round++;deal.state='판매 구단 검토';$('bState').textContent='판매 구단 검토';$('bOffer').textContent=fmt(o);$('sState').textContent='새 요청 도착';$('sRequest').textContent=fmt(o);$('sellerIncoming').classList.remove('hidden');$('sellerIncomingText').textContent=fmt(o);$('buyerIncoming').classList.add('hidden');add('📨 04렙쿠 → 산초HD : '+fmt(o)+' (라운드 '+deal.round+')')}
+function sellerAccept(){if(!deal.offer)return;deal.state='합의 완료';$('bState').textContent='합의 완료';$('sState').textContent='합의 완료';$('sellerIncoming').classList.add('hidden');add('✅ 산초HD → 04렙쿠 : 구매 구단 제안 수락 / '+fmt(deal.offer));add('🤝 최종 합의 완료')}
+function sellerCounter(){if(!deal.offer)return;const o=readSeller();deal.offer=o;deal.round++;deal.state='구매 구단 검토';$('sState').textContent='역제안 전송';$('bState').textContent='역제안 도착';$('bOffer').textContent=fmt(o);$('buyerIncomingText').textContent=fmt(o);$('buyerIncoming').classList.remove('hidden');$('sellerIncoming').classList.add('hidden');add('🔄 산초HD → 04렙쿠 : '+fmt(o)+' 역제안 (라운드 '+deal.round+')')}
+function sellerReject(){if(!deal.offer)return;deal.state='거절됨';$('bState').textContent='거절됨';$('sState').textContent='거절됨';$('sellerIncoming').classList.add('hidden');add('❌ 산초HD : 구매 구단 제안 거절')}
+function buyerAccept(){if(!deal.offer)return;deal.state='합의 완료';$('bState').textContent='합의 완료';$('sState').textContent='합의 완료';$('buyerIncoming').classList.add('hidden');add('✅ 04렙쿠 → 산초HD : 판매 구단 역제안 수락 / '+fmt(deal.offer));add('🤝 최종 합의 완료')}
+function buyerCounter(){if(!deal.offer)return;const o=readBuyer();deal.offer=o;deal.round++;deal.state='판매 구단 검토';$('bState').textContent='재역제안 전송';$('bOffer').textContent=fmt(o);$('sRequest').textContent=fmt(o);$('sellerIncomingText').textContent=fmt(o);$('sellerIncoming').classList.remove('hidden');$('buyerIncoming').classList.add('hidden');add('🔄 04렙쿠 → 산초HD : '+fmt(o)+' 재역제안 (라운드 '+deal.round+')')}
+function buyerReject(){if(!deal.offer)return;deal.state='거절됨';$('bState').textContent='거절됨';$('sState').textContent='거절됨';$('buyerIncoming').classList.add('hidden');add('❌ 04렙쿠 : 판매 구단 역제안 거절')}
+function withdraw(){if(!deal.offer||deal.state==='합의 완료')return;deal.state='철회됨';$('bState').textContent='철회됨';$('sState').textContent='제안 철회';$('sellerIncoming').classList.add('hidden');$('buyerIncoming').classList.add('hidden');add('↩️ 04렙쿠 : 현재 제안 철회')}
+function clearClauses(){['b','s'].forEach(x=>$(x+'Clauses').innerHTML='')}
+function resetLab(){deal={state:'제안 전',round:0,offer:null,log:[]};$('log').innerHTML='';clearClauses();$('bPrice').value=18;$('sPrice').value=24;$('bType').value='permanent';$('sType').value='permanent';$('bOther').value='';$('sOther').value='';$('bLoanFee').value=3;$('bYears').value='1시즌';$('bAppear').value='';toggleLoan();$('bState').textContent='제안 전';$('sState').textContent='요청 대기';$('bOffer').textContent='-';$('sRequest').textContent='아직 제안이 없습니다.';$('sellerIncoming').classList.add('hidden');$('buyerIncoming').classList.add('hidden');add('🧪 테스트 초기화')}
+function newDeal(){resetLab();add('🆕 새 협상 건 생성')}
+function presetPermanent(){resetLab();addClause('b','리그 20경기 출전 달성','3');addClause('b','팀 우승','5');$('bOther').value='조건 달성 시 추가금 지급';add('⚽ 완전이적 + 부가조항 프리셋')}
+function presetLoan(){resetLab();$('bType').value='loan';toggleLoan();$('bYears').value='2시즌';$('bLoanFee').value=5;$('bAppear').value='리그 25경기 이상 출전';addClause('b','팀 우승 달성','4');$('bOther').value='시즌 종료 후 원소속 복귀';add('📦 2시즌 임대 프리셋')}
+function presetLoanBuy(){resetLab();$('bType').value='loan_buy';toggleLoan();$('bYears').value='2시즌';$('bLoanFee').value=5;$('bAppear').value='리그 20경기 이상 출전';addClause('b','완전영입 옵션 발동','28');$('bOther').value='출전 조건 충족 시 선택적 완전영입';add('🔁 임대 후 완전영입 프리셋')}
+resetLab();
+</script>
+</body></html>
