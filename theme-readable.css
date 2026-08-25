@@ -1,31 +1,61 @@
-/* FTMA seasonal readability layer — loaded after theme.css. */
+/* FTMA seasonal readability + immersive reference-style environments. */
 
-/* ☀️ SUMMER — strong beach/sunset identity, calmer UI colors for easier reading. */
-body[data-ftma-theme="summer"] .site-header{background:linear-gradient(180deg,#6E3532,#91433E)!important;color:#FFFDF4!important}
-body[data-ftma-theme="summer"] .main-nav{background:linear-gradient(90deg,#803B38,#A94A42 50%,#803B38)!important;border-bottom:2px solid #FFD76A!important;box-shadow:0 5px 18px rgba(45,18,15,.34)!important}
-body[data-ftma-theme="summer"] .main-nav a{color:#FFF8E8!important;font-weight:900!important;text-shadow:0 1px 4px rgba(38,12,10,.72)!important}
-body[data-ftma-theme="summer"] .main-nav a.active{color:#3A1915!important;background:linear-gradient(180deg,#FFE078,#F3AA58)!important;text-shadow:none!important;border-bottom-color:#FFF5B4!important}
-body[data-ftma-theme="summer"] .directory-hero{background:linear-gradient(135deg,#98433F,#C45D4C 48%,#19766D)!important;color:#FFFDF4!important}
-body[data-ftma-theme="summer"] .directory-hero *{color:#FFFDF4!important;text-shadow:0 1px 4px rgba(50,18,15,.48)}
-body[data-ftma-theme="summer"] .featured-news,body[data-ftma-theme="summer"] .portal-card,body[data-ftma-theme="summer"] .club-card,body[data-ftma-theme="summer"] .profile-card{color:#FFFDF4!important;background:linear-gradient(145deg,rgba(86,48,47,.97),rgba(13,91,84,.97))!important;border-color:rgba(255,210,118,.42)!important;box-shadow:inset 0 1px 0 rgba(255,239,179,.16),0 12px 32px rgba(39,24,22,.28)!important}
-body[data-ftma-theme="summer"] .featured-news *,body[data-ftma-theme="summer"] .portal-card *,body[data-ftma-theme="summer"] .club-card *,body[data-ftma-theme="summer"] .profile-card *{color:inherit}
-body[data-ftma-theme="summer"] .portal-title{color:#FFF9E4!important}
-body[data-ftma-theme="summer"] .ftma-season-banner{color:#FFFBE0!important}
+/* =========================================================
+   SUMMER — beach scene, warm coral UI, readable white type
+   ========================================================= */
+body[data-ftma-theme="summer"]{background:#DDB16A url("season-summer.svg") center top/cover fixed no-repeat!important;color:#FFFDF5!important}
+body[data-ftma-theme="summer"] .app-shell{background:transparent!important}
+body[data-ftma-theme="summer"] main,body[data-ftma-theme="summer"] footer{background:transparent!important}
+body[data-ftma-theme="summer"] .site-header{background:linear-gradient(180deg,rgba(109,45,40,.94),rgba(184,67,55,.88))!important;color:#FFFDF4!important;border-bottom:2px solid #FFD76A!important;backdrop-filter:blur(3px)}
+body[data-ftma-theme="summer"] .main-nav{background:linear-gradient(90deg,rgba(115,48,43,.96),rgba(224,88,67,.94),rgba(115,48,43,.96))!important;border-bottom:2px solid #FFD76A!important;box-shadow:0 6px 22px rgba(45,18,15,.38)!important}
+body[data-ftma-theme="summer"] .main-nav a{color:#FFF9E9!important;font-weight:900!important;text-shadow:0 2px 5px rgba(35,10,8,.72)!important}
+body[data-ftma-theme="summer"] .main-nav a.active{color:#3A1915!important;background:linear-gradient(180deg,#FFE27A,#F6A653)!important;text-shadow:none!important}
+body[data-ftma-theme="summer"] .portal-title,.body[data-ftma-theme="summer"] .ftma-season-banner{color:#FFFBE2!important}
+body[data-ftma-theme="summer"] .portal-title{background:linear-gradient(90deg,rgba(181,65,54,.88),rgba(241,123,69,.88),rgba(23,137,122,.82))!important;text-shadow:0 2px 8px rgba(50,20,12,.55)!important;border-bottom:2px solid #FFD76A!important}
+body[data-ftma-theme="summer"] .featured-news,body[data-ftma-theme="summer"] .news-side,body[data-ftma-theme="summer"] .portal-card,body[data-ftma-theme="summer"] .club-card,body[data-ftma-theme="summer"] .profile-card{color:#FFFDF5!important;background:linear-gradient(145deg,rgba(69,45,43,.88),rgba(7,101,92,.84))!important;border-color:rgba(255,215,106,.68)!important;box-shadow:0 16px 38px rgba(33,26,20,.30),inset 0 1px 0 rgba(255,246,198,.20)!important;backdrop-filter:blur(5px)}
+body[data-ftma-theme="summer"] .featured-news *,body[data-ftma-theme="summer"] .news-side *,body[data-ftma-theme="summer"] .portal-card *,body[data-ftma-theme="summer"] .club-card *,body[data-ftma-theme="summer"] .profile-card *{color:inherit}
+body[data-ftma-theme="summer"] .featured-overlay h1,body[data-ftma-theme="summer"] .portal-card h1{color:#FFFFFF!important;text-shadow:0 2px 7px rgba(0,0,0,.48)!important}
+body[data-ftma-theme="summer"] .featured-overlay p,body[data-ftma-theme="summer"] .portal-card p{color:#FFF8E9!important}
+body[data-ftma-theme="summer"] .news-tag,body[data-ftma-theme="summer"] .transfer-tag{color:#FFE789!important}
+body[data-ftma-theme="summer"] .market-strip{background:rgba(20,65,59,.72)!important;color:#FFF!important;border-color:rgba(255,215,106,.38)!important}
+body[data-ftma-theme="summer"] .portal-section{background:rgba(20,57,53,.22)!important}
+body[data-ftma-theme="summer"] .dark-section{background:rgba(17,38,38,.35)!important}
+body[data-ftma-theme="summer"] .section-heading h2,body[data-ftma-theme="summer"] .section-heading p{color:#FFF!important;text-shadow:0 2px 5px rgba(0,0,0,.35)}
+body[data-ftma-theme="summer"] footer{background:rgba(50,30,27,.78)!important;color:#FFF!important}
 
-/* ❄️ WINTER — readable dark-frosted UI over a clearly visible white snowfield. */
-body[data-ftma-theme="winter"] .site-header{background:linear-gradient(180deg,#F7FCFF,#D9E9F0)!important;color:#17303E!important;border-bottom:2px solid #AFCBD7!important}
-body[data-ftma-theme="winter"] .main-nav{position:relative;background:linear-gradient(90deg,#213C4D,#2E5669 50%,#213C4D)!important;border-bottom:2px solid #DDEFF6!important;box-shadow:0 7px 22px rgba(29,58,72,.32)!important;color:#F7FDFF!important}
-body[data-ftma-theme="winter"] .main-nav a{color:#F7FDFF!important;font-weight:900!important;text-shadow:0 1px 4px rgba(5,24,34,.72)!important}
-body[data-ftma-theme="winter"] .main-nav a.active{color:#17303E!important;background:linear-gradient(180deg,#FFFFFF,#D4EAF2)!important;text-shadow:none!important;border-bottom-color:#FFFFFF!important}
-body[data-ftma-theme="winter"] .directory-hero{background:linear-gradient(135deg,#294B5D,#426B7D 52%,#1F3848)!important;color:#FFFFFF!important;border-bottom:2px solid #FFFFFF!important}
-body[data-ftma-theme="winter"] .directory-hero *{color:#FFFFFF!important;text-shadow:0 2px 6px rgba(5,24,34,.65)!important}
-body[data-ftma-theme="winter"] .featured-news,body[data-ftma-theme="winter"] .portal-card,body[data-ftma-theme="winter"] .club-card,body[data-ftma-theme="winter"] .profile-card{color:#17303E!important;background:linear-gradient(145deg,rgba(247,252,255,.98),rgba(210,229,237,.98))!important;border-color:#AFCBD7!important;box-shadow:inset 0 1px 0 #FFFFFF,0 12px 32px rgba(76,111,127,.18)!important}
-body[data-ftma-theme="winter"] .featured-news *,body[data-ftma-theme="winter"] .portal-card *,body[data-ftma-theme="winter"] .club-card *,body[data-ftma-theme="winter"] .profile-card *{color:inherit}
-body[data-ftma-theme="winter"] .portal-title{color:#17303E!important}
-body[data-ftma-theme="winter"] .ftma-season-banner{color:#17303E!important}
+/* =========================================================
+   WINTER — 70%-style match to the snowy reference: night sky,
+   mountains, cabin, trees, white snowfield. NO teal body text.
+   ========================================================= */
+body[data-ftma-theme="winter"]{background:#183A5E url("season-winter.svg") center top/cover fixed no-repeat!important;color:#FFFFFF!important}
+body[data-ftma-theme="winter"] .app-shell{background:transparent!important}
+body[data-ftma-theme="winter"] main,body[data-ftma-theme="winter"] footer{background:transparent!important}
+body[data-ftma-theme="winter"] .site-header{background:linear-gradient(180deg,rgba(5,18,37,.92),rgba(10,35,61,.88))!important;color:#FFFFFF!important;border-bottom:1px solid rgba(255,255,255,.20)!important;backdrop-filter:blur(3px)}
+body[data-ftma-theme="winter"] .brand-copy strong,body[data-ftma-theme="winter"] .brand-copy small{color:#FFFFFF!important}
+body[data-ftma-theme="winter"] .main-nav{background:linear-gradient(90deg,rgba(5,20,37,.96),rgba(18,53,83,.94),rgba(5,20,37,.96))!important;border-bottom:2px solid rgba(255,255,255,.38)!important;box-shadow:0 8px 26px rgba(0,10,25,.50)!important}
+body[data-ftma-theme="winter"] .main-nav::before,body[data-ftma-theme="winter"] .main-nav::after{display:none!important}
+body[data-ftma-theme="winter"] .main-nav a{color:#FFFFFF!important;font-weight:900!important;text-shadow:0 2px 5px rgba(0,0,0,.78)!important}
+body[data-ftma-theme="winter"] .main-nav a.active{color:#10263A!important;background:linear-gradient(180deg,#FFFFFF,#DDECF5)!important;text-shadow:none!important}
+body[data-ftma-theme="winter"] .portal-title{color:#FFFFFF!important;background:linear-gradient(90deg,rgba(7,27,49,.72),rgba(18,59,92,.68),rgba(7,27,49,.72))!important;text-shadow:0 2px 8px rgba(0,0,0,.75)!important;border-bottom:1px solid rgba(255,255,255,.24)!important}
+body[data-ftma-theme="winter"] .featured-news,body[data-ftma-theme="winter"] .news-side,body[data-ftma-theme="winter"] .portal-card,body[data-ftma-theme="winter"] .club-card,body[data-ftma-theme="winter"] .profile-card{color:#FFFFFF!important;background:linear-gradient(145deg,rgba(7,25,47,.90),rgba(18,55,85,.86))!important;border-color:rgba(218,239,249,.70)!important;box-shadow:0 18px 42px rgba(0,12,28,.48),inset 0 1px 0 rgba(255,255,255,.18)!important;backdrop-filter:blur(5px)}
+body[data-ftma-theme="winter"] .featured-news *,body[data-ftma-theme="winter"] .news-side *,body[data-ftma-theme="winter"] .portal-card *,body[data-ftma-theme="winter"] .club-card *,body[data-ftma-theme="winter"] .profile-card *{color:inherit!important}
+body[data-ftma-theme="winter"] .featured-overlay h1,body[data-ftma-theme="winter"] .portal-card h1{color:#FFFFFF!important;text-shadow:0 2px 7px rgba(0,0,0,.62)!important}
+body[data-ftma-theme="winter"] .featured-overlay p,body[data-ftma-theme="winter"] .portal-card p{color:#EAF7FF!important}
+body[data-ftma-theme="winter"] .news-tag,body[data-ftma-theme="winter"] .transfer-tag{color:#FFFFFF!important;border-color:rgba(255,255,255,.48)!important;background:rgba(8,30,53,.55)!important}
+body[data-ftma-theme="winter"] .market-strip{background:rgba(7,25,45,.72)!important;color:#FFFFFF!important;border-color:rgba(255,255,255,.28)!important}
+body[data-ftma-theme="winter"] .portal-section{background:rgba(6,23,42,.26)!important}
+body[data-ftma-theme="winter"] .dark-section{background:rgba(2,13,27,.40)!important}
+body[data-ftma-theme="winter"] .section-heading h2,body[data-ftma-theme="winter"] .section-heading p{color:#FFFFFF!important;text-shadow:0 2px 6px rgba(0,0,0,.55)!important}
+body[data-ftma-theme="winter"] .eyebrow{color:#DDF4FF!important}
+body[data-ftma-theme="winter"] footer{background:rgba(4,17,32,.82)!important;color:#FFFFFF!important}
 
-/* Seasonal effects stay behind readable content. */
-.ftma-season-fx{z-index:0!important}
-body[data-ftma-theme="summer"] .app-shell,body[data-ftma-theme="winter"] .app-shell{position:relative;z-index:1}
+/* Banner: strong contrast in both seasons. */
+body[data-ftma-theme="summer"] .ftma-season-banner{color:#FFFBE5!important;background:rgba(146,57,47,.86)!important;border-bottom:2px solid #FFD76A!important;text-shadow:0 2px 7px rgba(0,0,0,.58)!important}
+body[data-ftma-theme="winter"] .ftma-season-banner{color:#FFFFFF!important;background:rgba(7,25,46,.84)!important;border-bottom:2px solid rgba(255,255,255,.38)!important;text-shadow:0 2px 7px rgba(0,0,0,.72)!important}
+
+/* Keep atmospheric FX behind the UI; snowfall remains visible over the scene. */
+.ftma-season-fx{z-index:2!important}
 body[data-ftma-theme="summer"] .site-header,body[data-ftma-theme="winter"] .site-header{position:relative;z-index:4}
 body[data-ftma-theme="summer"] .main-nav,body[data-ftma-theme="winter"] .main-nav{position:relative;z-index:4}
+body[data-ftma-theme="summer"] .app-shell,body[data-ftma-theme="winter"] .app-shell{position:relative;z-index:1}
+body[data-ftma-theme="winter"] .snowflake{z-index:5!important}
