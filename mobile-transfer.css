@@ -1,0 +1,56 @@
+/* FTMA transfer mobile UI */
+@media (max-width:700px){
+  .header-main{min-height:72px;height:auto;padding:10px 14px;gap:10px}
+  .brand{min-width:0;flex:1}
+  .brand-seal{width:46px;height:46px;flex:0 0 46px}
+  .brand-seal b{font-size:11px;line-height:12px}.brand-seal small{font-size:3px}
+  .header-actions{max-width:52%;gap:5px;justify-content:flex-end}
+  .header-actions a,.header-actions button,.login-btn,.club-login-btn{padding:9px 9px!important;font-size:9px!important;white-space:nowrap}
+  .main-nav{height:44px;overflow-x:auto;justify-content:flex-start;-webkit-overflow-scrolling:touch}
+  .main-nav a{height:44px;padding:0 16px;font-size:11px;flex:0 0 auto}
+
+  /* transfer market */
+  .directory-hero{padding:36px 16px 26px}
+  .directory-hero h1{font-size:34px;letter-spacing:-1.5px}
+  .directory-hero>p:not(.eyebrow){font-size:11px;line-height:1.7}
+  .directory-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:18px}
+  .directory-actions a{padding:11px 8px;text-align:center;font-size:9px}
+  .directory-section{padding:24px 12px 48px}
+  .directory-heading{align-items:end;margin-bottom:12px}
+  .directory-heading h2{font-size:22px}
+  .directory-heading>span{font-size:10px}
+  .market-directory-row,.market-directory-row:has(.market-offer-btn){display:grid;grid-template-columns:minmax(0,1fr) auto!important;gap:8px;padding:12px 10px}
+  .market-player-cell{gap:9px}
+  .market-player-photo{width:40px;height:40px;flex-basis:40px}
+  .market-player-main b{font-size:11px}.market-player-main small{font-size:8px;line-height:1.45}
+  .market-directory-row>strong{font-size:10px;align-self:center}
+  .market-directory-row .market-offer-btn{grid-column:2;grid-row:2;min-width:74px;padding:8px 7px;font-size:8px}
+  .market-directory-row>strong{grid-column:2;grid-row:1}
+  .search-panel{margin-top:18px;width:100%}.search-panel input{padding:13px 12px;font-size:12px}.search-panel span{padding:13px 10px}
+
+  /* direct-offer modal becomes a comfortable bottom sheet */
+  .enh-offer-modal{align-items:flex-end;padding:0;background:rgba(0,0,0,.72)}
+  .enh-offer-card{width:100%;max-height:92vh;border-left:0;border-right:0;border-bottom:0;border-radius:16px 16px 0 0;padding:20px 16px calc(18px + env(safe-area-inset-bottom));box-shadow:0 -18px 60px rgba(0,0,0,.65)}
+  .enh-offer-card h2{font-size:22px}.enh-player{font-size:10px;margin-bottom:12px}
+  .enh-money{font-size:10px;padding:10px}.enh-grid{grid-template-columns:1fr;gap:7px}.enh-field{margin-top:9px}
+  .enh-field label{font-size:9px}.enh-field input,.enh-field select,.enh-field textarea{min-height:44px;padding:10px;font-size:12px;border-radius:6px}
+  .enh-field textarea{min-height:82px}.enh-clause{grid-template-columns:minmax(0,1fr) 86px 50px}.enh-clause input{min-height:42px;font-size:11px}.enh-clause button{min-height:42px}
+  .enh-actions{position:sticky;bottom:0;background:#141619;padding-top:10px;margin-top:14px}.enh-actions button{flex:1;min-height:44px;border-radius:6px}
+
+  /* club dashboard */
+  .club-dash{padding:24px 14px 50px}
+  .club-dash-head{gap:14px;margin-bottom:18px}.club-dash-head h1{font-size:32px}
+  .club-dash-actions{width:100%;display:grid;grid-template-columns:1fr 1fr}.club-dash-actions a{padding:11px 8px;text-align:center;font-size:9px}
+  .club-stat-grid.dash-enh{grid-template-columns:1fr 1fr;gap:7px}.club-stat{padding:15px}.club-stat strong{font-size:23px;margin-top:9px}.budget-stat{grid-column:1/-1}.budget-stat strong{font-size:25px!important}
+  .club-panel{padding:16px}.club-panel h2{font-size:18px}.squad-grid{gap:7px}
+  .squad-card{padding:10px;gap:9px}.squad-card img{width:42px;height:42px}.squad-player-link{gap:9px;min-width:0!important}.squad-card b{font-size:11px}.squad-card small{font-size:8px}.squad-manage{margin-left:0!important;width:100%;justify-content:flex-start}
+  .transfer-manage-actions{display:grid;grid-template-columns:1fr;gap:7px}.transfer-manage-actions a{text-align:center;padding:11px 8px}
+
+  /* negotiation */
+  .transfer-page{padding:26px 12px 54px}.transfer-head{padding-bottom:16px;margin-bottom:16px}.transfer-head h1{font-size:32px}.transfer-state{font-size:8px}
+  .role-switch{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px}.role-switch .btn{padding:9px 5px;font-size:9px}
+  .transfer-grid{grid-template-columns:1fr;gap:10px}.panel{padding:14px}.panel h2{font-size:17px;margin-bottom:12px}
+  .request{padding:12px}.request-top{align-items:flex-start}.request b{font-size:11px}.request small{font-size:8px;line-height:1.5}
+  .detail-box{padding:12px}.detail-row{font-size:10px;gap:8px;flex-direction:column}.detail-row b{text-align:left;overflow-wrap:anywhere}.two{grid-template-columns:1fr}.clause-editor{grid-template-columns:minmax(0,1fr);gap:5px}.clause-editor input,.clause-editor button{min-height:42px}.actions{display:grid;grid-template-columns:1fr 1fr}.actions .btn{min-height:44px}.log{max-height:230px}.notice{font-size:9px}
+}
+@media(max-width:380px){.header-actions a,.header-actions button{padding:8px 7px!important;font-size:8px!important}.main-nav a{padding:0 13px}.directory-actions{grid-template-columns:1fr}.role-switch{grid-template-columns:1fr}.actions{grid-template-columns:1fr}.market-directory-row .market-offer-btn{min-width:68px}}
