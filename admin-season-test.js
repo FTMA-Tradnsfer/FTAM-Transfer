@@ -15,16 +15,18 @@
       btn.disabled=true; box.innerHTML='<div style="border:1px solid #303338;background:#0b0d0f;padding:16px;color:#aaa">테스트 중...</div>';
       const checks=[];
       try{
-        const {data:settings,error:sErr}=await db.from('site_settings').select('key,value').in('key',['current_season','season_status','transfer_window_status','loan_processing_deadline']);
+        const {data:settings,error:sErr}=await db.from('site_settings').select('key,value').in('key',['current_season','season_status','transfer_market_open','loan_processing_deadline']);
         if(sErr) throw sErr;
         const m=Object.fromEntries((settings||[]).map(x=>[x.key,x.value]));
-        checks.push(['관리자 세션','확인',!!(sessionStorage.getItem('ftma_admin_token'))]);
+        const adminToken=sessionStorage.getItem('ftma_admin_token')||'';
+        checks.push(['관리자 세션',adminToken?'토큰 확인됨':'토큰 없음',!!adminToken]);
         checks.push(['현재 시즌',m.current_season||'미설정',!!m.current_season]);
         checks.push(['시즌 상태',m.season_status||'미설정',m.season_status!=='ended']);
-        checks.push(['이적시장 상태',m.transfer_window_status||'미설정',m.transfer_window_status==='OPEN'||m.transfer_window_status==='CLOSED']);
+        const marketOpen=String(m.transfer_market_open||'').toLowerCase()==='true';
+        checks.push(['이적시장 상태',marketOpen?'OPEN':'CLOSED',true]);
         const {data:players,error:pErr}=await db.from('players').select('id,name,is_loan,loan_type,loan_parent_club_id,loan_end_date,loan_buy_option_fee,loan_mandatory_fee').eq('is_loan',true).order('name');
         if(pErr) throw pErr;
-        const unknown=(players||[]).filter(p=>!['standard','option','mandatory',null].includes(p.loan_type));
+        const unknown=(players||[]).filter(p=>!['general','standard','option','mandatory',null].includes(p.loan_type));
         checks.push(['임대 선수 조회',`${(players||[]).length}명`,!unknown.length]);
         const missingParent=(players||[]).filter(p=>!p.loan_parent_club_id);
         checks.push(['임대 원소속 정보',missingParent.length?`${missingParent.length}명 미설정`:'모두 설정',missingParent.length===0]);
