@@ -1,1 +1,1 @@
-(function(){const U='https://iloanplyuatfcwzovbpb.supabase.co',K='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhbGciOiJIUzI1NiJ9',db=window.supabase.createClient(U,'eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJpbG9hbnBseXVhdGZj...');})();
+(function(){const U='https://iloanplyuatfcwzovbpb.supabase.co',K='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJpbG9hbnBseXVhdGZj...' ;})();
