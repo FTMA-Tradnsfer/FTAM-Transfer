@@ -1,6 +1,6 @@
 /* FTMA: season end + 2-day loan processing controls */
 (function(){
-  const URL='https://iloanplyuatfcwzovbpb.supabase.co',KEY='sb_publishable_oPXhOaLIGK05Ehw-o6jDsw_TKJODpjK';
+  const URL='https://iloanplyuatfcwzovbpb.supabase.co',KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlsb2FucGx5dWF0ZmN3em92YnBiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcyMTkzMjUsImV4cCI6MjEwMjc5NTMyNX0.O-RpWDU_8u53YhZvwOk_grnufqAGnhYTNrSDtZhh0nY';
   function boot(){
     if(!window.supabase||!document.querySelector('.admin-grid'))return false;
     if(document.getElementById('ftmaSeasonTools'))return true;
