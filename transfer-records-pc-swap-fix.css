@@ -1,0 +1,20 @@
+/* PC swap alignment: use the exact same five-column structure as normal transfer rumours. */
+@media (min-width:1101px){
+  .transfer-record-row.is-swap-rumour{
+    grid-template-columns:78px minmax(220px,1.25fr) 150px minmax(150px,.85fr) 210px !important;
+    gap:14px !important;
+    box-sizing:border-box;
+  }
+  .transfer-record-row.is-swap-rumour > .transfer-date{grid-column:1;min-width:0;}
+  .transfer-record-row.is-swap-rumour > .transfer-player{grid-column:2;min-width:0;max-width:100%;overflow:hidden;}
+  .transfer-record-row.is-swap-rumour > .transfer-from{grid-column:3;min-width:0;max-width:100%;overflow:hidden;}
+  .transfer-record-row.is-swap-rumour > .swap-record-center{grid-column:4;min-width:0 !important;width:100% !important;max-width:100% !important;box-sizing:border-box;overflow:hidden;}
+  .transfer-record-row.is-swap-rumour > .transfer-to{grid-column:5;min-width:0;max-width:100%;overflow:hidden;}
+  .transfer-record-row.is-swap-rumour .swap-record-center{flex-direction:row !important;justify-content:center !important;gap:6px !important;}
+  .transfer-record-row.is-swap-rumour .swap-record-center > div:first-child{flex:0 0 38px;min-width:38px;}
+  .transfer-record-row.is-swap-rumour .swap-offer{width:auto;max-width:100px !important;min-width:0;flex:0 1 100px;overflow:hidden;}
+  .transfer-record-row.is-swap-rumour .swap-offer img{width:42px !important;height:42px !important;flex:0 0 42px !important;}
+  .transfer-record-row.is-swap-rumour .swap-offer-text{max-width:48px !important;min-width:0;overflow:hidden;}
+  .transfer-record-row.is-swap-rumour .swap-offer-text strong{max-width:48px !important;font-size:8px !important;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .transfer-record-row.is-swap-rumour .swap-offer-text b{font-size:12px !important;white-space:nowrap;}
+}
