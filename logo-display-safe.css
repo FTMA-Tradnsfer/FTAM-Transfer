@@ -1,0 +1,6 @@
+/* Safe club-logo display: preserve the full source image without cropping or distortion. */
+.club-mark{overflow:hidden!important;box-sizing:border-box!important;display:grid!important;place-items:center!important;}
+.club-mark .club-logo{display:block!important;width:calc(100% - 8px)!important;height:calc(100% - 8px)!important;max-width:100%!important;max-height:100%!important;object-fit:contain!important;object-position:center!important;box-sizing:border-box!important;border-radius:0!important;}
+.club-title-logo{display:grid!important;place-items:center!important;box-sizing:border-box!important;overflow:hidden!important;}
+.club-title-logo img{display:block!important;width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;object-fit:contain!important;object-position:center!important;box-sizing:border-box!important;}
+@media(max-width:560px){.club-mark .club-logo{width:calc(100% - 8px)!important;height:calc(100% - 8px)!important;}}
