@@ -1,0 +1,61 @@
+/* Final desktop transfer-market row alignment. Loaded after runtime market styles. */
+@media (min-width:901px){
+  .market-directory-row{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) 150px 190px!important;
+    grid-template-rows:92px!important;
+    align-items:center!important;
+    gap:18px!important;
+    min-height:92px!important;
+    height:92px!important;
+    padding:10px 18px!important;
+    box-sizing:border-box!important;
+  }
+  .market-directory-row>.market-player-cell{
+    grid-column:1!important;
+    grid-row:1!important;
+    min-width:0!important;
+    width:100%!important;
+    display:flex!important;
+    align-items:center!important;
+  }
+  .market-directory-row>strong{
+    grid-column:2!important;
+    grid-row:1!important;
+    justify-self:end!important;
+    align-self:center!important;
+    text-align:right!important;
+    white-space:nowrap!important;
+  }
+  .market-directory-row>.market-actions,
+  .market-directory-row>.status{
+    grid-column:3!important;
+    grid-row:1!important;
+    justify-self:end!important;
+    align-self:center!important;
+  }
+  .market-directory-row>.market-actions{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:flex-end!important;
+    gap:7px!important;
+    width:100%!important;
+    min-width:0!important;
+  }
+  .market-directory-row>.market-actions .market-offer-btn,
+  .market-directory-row>.market-actions .market-fav-btn{
+    flex:0 0 auto!important;
+    min-height:38px!important;
+    height:38px!important;
+    box-sizing:border-box!important;
+  }
+  .market-directory-row .market-player-photo{
+    width:56px!important;
+    height:56px!important;
+    min-width:56px!important;
+    max-width:56px!important;
+    min-height:56px!important;
+    max-height:56px!important;
+    flex:0 0 56px!important;
+  }
+}
