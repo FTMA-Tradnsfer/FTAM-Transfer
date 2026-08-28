@@ -1,9 +1,9 @@
-/* Club logo display: keep the existing frame while allowing individual source artwork to be visually balanced. */
+/* Club logo display: preserve the complete crest/artwork inside the circular frame. */
 .club-mark{overflow:hidden!important;box-sizing:border-box!important;display:grid!important;place-items:center!important;border-radius:50%!important;}
-.club-mark .club-logo{display:block!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:cover!important;object-position:center!important;box-sizing:border-box!important;border-radius:50%!important;}
+.club-mark .club-logo{display:block!important;width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;object-fit:contain!important;object-position:center!important;box-sizing:border-box!important;border-radius:0!important;}
 .club-title-logo{display:grid!important;place-items:center!important;box-sizing:border-box!important;overflow:hidden!important;border-radius:50%!important;}
-.club-title-logo img{display:block!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:cover!important;object-position:center!important;box-sizing:border-box!important;border-radius:50%!important;}
-/* HD연세 FC: its source artwork has a tall crest with built-in background, so scale the complete artwork down slightly instead of cropping it. */
-.club-mark .club-logo[alt="HD연세 FC 로고"]{width:84%!important;height:84%!important;object-fit:contain!important;object-position:center!important;border-radius:50%!important;}
-.club-title-logo img[alt="HD연세 FC 엠블럼"]{width:84%!important;height:84%!important;object-fit:contain!important;object-position:center!important;border-radius:50%!important;margin:auto!important;}
+.club-title-logo img{display:block!important;width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;object-fit:contain!important;object-position:center!important;box-sizing:border-box!important;border-radius:0!important;}
+/* HD연세 FC: slightly reduce the tall crest so the complete artwork remains visible. */
+.club-mark .club-logo[alt="HD연세 FC 로고"]{width:84%!important;height:84%!important;object-fit:contain!important;object-position:center!important;border-radius:0!important;}
+.club-title-logo img[alt="HD연세 FC 엠블럼"]{width:84%!important;height:84%!important;object-fit:contain!important;object-position:center!important;border-radius:0!important;margin:auto!important;}
 @media(max-width:560px){.club-mark .club-logo{width:100%!important;height:100%!important}.club-mark .club-logo[alt="HD연세 FC 로고"]{width:84%!important;height:84%!important}.club-title-logo img[alt="HD연세 FC 엠블럼"]{width:84%!important;height:84%!important;}}
