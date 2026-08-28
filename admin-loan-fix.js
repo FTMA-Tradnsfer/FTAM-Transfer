@@ -17,3 +17,20 @@
   }
   if(!install()){let n=0;const t=setInterval(()=>{if(install()||++n>100)clearInterval(t)},100)}
 })();
+
+/* FTMA: the admin page already loads this loan-fix file, so use it as the stable entry point for the finance approval UI. */
+(function(){
+  function loadFinanceScript(){
+    if(window.__ftmaFinanceScriptLoaded||document.querySelector('script[data-ftma-finance]'))return;
+    window.__ftmaFinanceScriptLoaded=true;
+    const s=document.createElement('script');
+    s.src='finance-admin-section.js?v=20260829finance1';
+    s.dataset.ftmaFinance='1';
+    s.async=false;
+    s.onload=()=>window.refreshFinanceApprovals?.();
+    s.onerror=()=>console.error('[FTMA finance] finance-admin-section.js failed to load');
+    document.head.appendChild(s);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',loadFinanceScript,{once:true});
+  else loadFinanceScript();
+})();
