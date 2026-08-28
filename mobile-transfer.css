@@ -19,13 +19,29 @@
   .directory-heading{align-items:end;margin-bottom:12px}
   .directory-heading h2{font-size:22px}
   .directory-heading>span{font-size:10px}
-  .market-directory-row,.market-directory-row:has(.market-offer-btn){display:grid;grid-template-columns:minmax(0,1fr) auto!important;gap:8px;padding:12px 10px}
-  .market-player-cell{gap:9px}
-  .market-player-photo{width:40px;height:40px;flex-basis:40px}
-  .market-player-main b{font-size:11px}.market-player-main small{font-size:8px;line-height:1.45}
-  .market-directory-row>strong{font-size:10px;align-self:center}
-  .market-directory-row .market-offer-btn{grid-column:2;grid-row:2;min-width:74px;padding:8px 7px;font-size:8px}
-  .market-directory-row>strong{grid-column:2;grid-row:1}
+
+  /* Core player card: never use the desktop 3-column layout on phones. */
+  body .market-directory-row,
+  body .market-directory-row:has(.market-offer-btn){
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) 150px!important;
+    grid-template-rows:auto auto!important;
+    gap:7px 10px!important;
+    padding:14px 10px!important;
+    width:100%!important;
+    min-width:0!important;
+    overflow:hidden!important;
+  }
+  body .market-player-cell{grid-column:1!important;grid-row:1 / span 2!important;min-width:0!important;width:auto!important;display:flex!important;align-items:center!important;gap:9px!important}
+  body .market-player-photo{width:40px;height:40px;flex:0 0 40px}
+  body .market-player-main{min-width:0!important;flex:1!important;width:auto!important}
+  body .market-player-main b{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+  body .market-player-main small{font-size:8px;line-height:1.45;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+  body .market-directory-row>strong{grid-column:2!important;grid-row:1!important;font-size:10px;align-self:end;text-align:right;white-space:nowrap}
+  body .market-directory-row .market-actions{grid-column:2!important;grid-row:2!important;display:grid!important;grid-template-columns:1fr 1fr!important;gap:5px!important;width:100%!important;min-width:0!important}
+  body .market-directory-row .market-actions .market-offer-btn,
+  body .market-directory-row .market-actions .market-fav-btn{width:100%!important;min-width:0!important;height:34px!important;padding:6px 3px!important;font-size:8px!important;white-space:nowrap!important}
+
   .search-panel{margin-top:18px;width:100%}.search-panel input{padding:13px 12px;font-size:12px}.search-panel span{padding:13px 10px}
 
   /* direct-offer modal becomes a comfortable bottom sheet */
@@ -53,4 +69,8 @@
   .request{padding:12px}.request-top{align-items:flex-start}.request b{font-size:11px}.request small{font-size:8px;line-height:1.5}
   .detail-box{padding:12px}.detail-row{font-size:10px;gap:8px;flex-direction:column}.detail-row b{text-align:left;overflow-wrap:anywhere}.two{grid-template-columns:1fr}.clause-editor{grid-template-columns:minmax(0,1fr);gap:5px}.clause-editor input,.clause-editor button{min-height:42px}.actions{display:grid;grid-template-columns:1fr 1fr}.actions .btn{min-height:44px}.log{max-height:230px}.notice{font-size:9px}
 }
-@media(max-width:380px){.header-actions a,.header-actions button{padding:8px 7px!important;font-size:8px!important}.main-nav a{padding:0 13px}.directory-actions{grid-template-columns:1fr}.role-switch{grid-template-columns:1fr}.actions{grid-template-columns:1fr}.market-directory-row .market-offer-btn{min-width:68px}}
+@media(max-width:380px){
+  .header-actions a,.header-actions button{padding:8px 7px!important;font-size:8px!important}.main-nav a{padding:0 13px}.directory-actions{grid-template-columns:1fr}.role-switch{grid-template-columns:1fr}.actions{grid-template-columns:1fr}
+  body .market-directory-row,body .market-directory-row:has(.market-offer-btn){grid-template-columns:minmax(0,1fr) 128px!important}
+  body .market-directory-row .market-actions .market-offer-btn,body .market-directory-row .market-actions .market-fav-btn{font-size:7px!important;padding-left:2px!important;padding-right:2px!important}
+}
