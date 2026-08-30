@@ -12,7 +12,7 @@ let dataF={players:[],clubs:[],transfers:[],news:[]};
 async function safeF(url){try{return await getF(url)}catch(e){console.warn('[FTMA manager]',e);return []}}
 async function loadManagerF(){
  const [players,clubs,transfers,news]=await Promise.all([
-  safeF(`${AMF_URL}/rest/v1/players?select=id,name,photo_url,nationality,position,birth_date,age,ability,potential,market_value,current_club_id,shirt_number,squad_type,status&order=name`),
+  safeF(`${AMF_URL}/rest/v1/players?select=id,name,photo_url,nationality,position,birth_date,age,ability,potential,market_value,current_club_id,shirt_number,squad_type,status,is_loan,loan_type,loan_end_date,loan_parent_club_id,loan_buy_option_fee,loan_mandatory_fee&order=name`),
   safeF(`${AMF_URL}/rest/v1/clubs?select=id,name,country,league,description,logo_url&order=name`),
   safeF(`${AMF_URL}/rest/v1/transfers?select=id,player_id,from_club_id,to_club_id,from_club_name,to_club_name,from_club_image_url,to_club_image_url,transfer_fee,fee_currency,transfer_date,transfer_type,status,announcement_image_url,notes,created_at&order=transfer_date.desc,created_at.desc`),
   safeF(`${AMF_URL}/rest/v1/news?select=id,title,category,summary,body,cover_image_url,published,published_at&order=published_at.desc`)
