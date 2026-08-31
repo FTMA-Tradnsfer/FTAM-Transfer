@@ -34,3 +34,20 @@
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',loadFinanceScript,{once:true});
   else loadFinanceScript();
 })();
+
+/* FTMA: load half-season return controls. */
+(function(){
+  function loadHalfSeasonControls(){
+    if(window.__ftmaHalfSeasonControlsLoaded||document.querySelector('script[data-ftma-half-season]'))return;
+    window.__ftmaHalfSeasonControlsLoaded=true;
+    const s=document.createElement('script');
+    s.src='admin-half-season-loan.js?v=20260831half1';
+    s.dataset.ftmaHalfSeason='1';
+    s.async=false;
+    s.onload=()=>window.ftmaRenderHalfSeasonLoans?.();
+    s.onerror=()=>console.error('[FTMA loan] half-season controls failed to load');
+    document.head.appendChild(s);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',loadHalfSeasonControls,{once:true});
+  else loadHalfSeasonControls();
+})();
