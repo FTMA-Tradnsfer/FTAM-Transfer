@@ -1,4 +1,4 @@
-/* FTMA market/player search — delegated events, mobile/PC safe. */
+/* FTMA market/player search — delegated events + async render safe, mobile/PC safe. */
 (function(){
 'use strict';
 const norm=v=>String(v??'').normalize('NFKC').replace(/\s+/g,'').toLocaleLowerCase('ko-KR');
@@ -57,7 +57,20 @@ function bindDelegatedEvents(){
   document.addEventListener('keydown',e=>{if(e.target?.id==='ftmaMarketUnifiedInput'&&e.key==='Enter'){e.preventDefault();e.stopPropagation();filterMarket();}},true);
   document.addEventListener('click',e=>{if(e.target?.closest?.('#ftmaMarketSearchButton')){e.preventDefault();e.stopPropagation();filterMarket();}},true);
 }
-function start(){bindDelegatedEvents();install();[100,300,700,1500,3000].forEach(ms=>setTimeout(install,ms));}
+function bindMarketRenderWatcher(){
+  if(document.documentElement.dataset.ftmaMarketRenderWatcher==='1')return;
+  const list=document.getElementById('marketList');
+  if(!list)return;
+  document.documentElement.dataset.ftmaMarketRenderWatcher='1';
+  let queued=false;
+  const observer=new MutationObserver(records=>{
+    const changed=records.some(r=>Array.from(r.addedNodes).concat(Array.from(r.removedNodes)).some(n=>n.nodeType===1&&(n.classList?.contains('market-directory-row')||n.querySelector?.('.market-directory-row'))));
+    if(!changed||queued)return;
+    queued=true;requestAnimationFrame(()=>{queued=false;filterMarket();});
+  });
+  observer.observe(list,{childList:true,subtree:true});
+}
+function start(){bindDelegatedEvents();install();bindMarketRenderWatcher();[100,300,700,1500,3000].forEach(ms=>setTimeout(install,ms));}
 window.ftmaApplyMarketSearch=filterMarket;
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
 })();
